@@ -65,35 +65,30 @@ pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id
 });
 
 router.put('/:id', (request,response, next) =>{
-
     const {id} = request.params;
     const keys = ['fname','lname', 'dob', 'gender', 'post', 'age', 
     'mobile_no','password', 'status', 'email', 'block_count', 'mobile_model', 
     'auth_token', 'is_active', 'device_id','photo', 'token'];
     const fields = [];
-
     keys.forEach(key =>{
         if(request.body[key]) fields.push(key);
     });
-
     fields.forEach((field, index) =>{
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2)`,
         [request.body[field], id], (err, res) =>{
             if(err) return next(err);
-              if(index === fields.length - 1)  
+              if(index === fields.length - 1)
               response.redirect('/user/getUser');
           });
         });
     });
- 
 
- router.delete('/:id', (request,response,next) =>{
+    router.delete('/:id', (request,response,next) =>{
         const id = request.params;
 
         pool.query(`DELETE FROM public.users WHERE id =($1)`,[id],
         (err, res)=>{
             if(err) return next(err);
-            
             response.redirect('/user_detail/user_detail');
         });
 
