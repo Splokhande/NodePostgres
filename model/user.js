@@ -9,16 +9,16 @@ const User = function(User){
     this.dob = User.dob;
     this.gender = User.gender;
     this.password = User.password;
-    this.mobileNo = User.mobileNo;
+    this.mobile_no = User.mobile_no;
     this.photo = User.photo;
     this.post = User.post;
     this.status = User.status;
     this.email = User.email;
-    this.blockCount = User.blockCount;
-    this.mobileModel = User.mobileModel;
-    this.isLoggedIn = User.isLoggedIn;
-    this.isActive = User.isActive;
-    this.deviceId = User.deviceId;
+    this.block_count = User.block_count;
+    this.mobile_model = User.mobile_model;
+    this.auth_token = User.auth_token;
+    this.is_active = User.is_active;
+    this.device_id = User.device_id;
     this.token = User.token;
 }
 

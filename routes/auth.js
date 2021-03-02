@@ -9,43 +9,27 @@ var User = require('../routes/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
-router.post('/login', (req, res, next) => {
+router.post('/login', (request, response, next) => {
 
   
 
     // Read username and password from request body
-    const { email, password } = req.body;
-    console.log(req.body,email, password);
+    const { email, password } = request.body;
+    // console.log(request.body,email, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
     user = pool.query("Select * from public.users WHERE email= $1 AND password = $2", 
     [email,password])
     .then((rows,err) =>{
         if(err) return next(err);
-
-    //     if(res.rowCount === 0){
-    //         response.json({"message":"No User Found"});
-    //     }
-    //     else{
-    //         const accessToken = jwt.sign({ username: email,
-    //             // role: user.role 
-    //         }, secret);
-    //         console.log(accessToken);
-    //     //    return  response.json({
-    //     //         "token":accessToken}
-    //     //     );
-    //     // response.json(res.rows);
-    // }
-            
-           
         // Generate an access token
         const accessToken = jwt.sign({ username: rows.username,}, secret);
-        console.log(rows.rows[0].id, accessToken);
+        // console.log(rows.rows[0].id, accessToken);
             pool.query(`UPDATE public.users SET auth_token = ($1) WHERE id =($2)`,
-        
-            [accessToken, rows.rows[0].id]).then(data =>{
-                console.log(data.rows);
-                pool.query("Select * from public.users WHERE id = $1", [rows.rows[0].id], (err, res) =>{
+            [accessToken, rows.rows[0].id]).then((data, err) =>{
+                // console.log(data.rows);
+                pool.query("Select * from public.users WHERE id = $1",
+                 [rows.rows[0].id], (err, res) =>{
                     if(err) return next(err);
                     if(res.rowCount === 0)
                     {
@@ -53,7 +37,9 @@ router.post('/login', (req, res, next) => {
                     }
                     else
                     {
-                        response.redirect(User.);
+
+                        console.log("token generated and login successful");
+                        response.json(res.rows);
                 }
               });
             });

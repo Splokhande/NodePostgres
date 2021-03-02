@@ -2,8 +2,10 @@ const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
 const { password } = require("../db_config/config");
+var pswd = require('../functions/encrypt');
 
 // module.exports = app => {
+    
 //     const user = require("../controllers/user");
 
 //     // Create a new User
@@ -51,10 +53,13 @@ router.get('/getUser/:id', (request,response, next) =>{
 
 
 router.post('/', (request,response, next) =>{
-const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, is_logged_in , is_active, password, status, photo} = request.body;
+const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
+const paswd = pswd.encrypt(password).then(val =>{
+    return val;
+} );
 
-    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, is_logged_in , is_active, password, status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17)' ,
-    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, is_logged_in , is_active, password, status, photo], (err, res) =>{
+    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17)' ,
+    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, paswd, status, photo], (err, res) =>{
         if(err) return next(err);
         console.log("created User: ",res.rowCount);
         response.redirect('/user/getUser');
@@ -67,7 +72,7 @@ router.put('/:id', (request,response, next) =>{
     const {id} = request.params;
     const keys = ['fname','lname', 'dob', 'gender', 'post', 'age', 
     'mobile_no','password', 'status', 'email', 'block_count', 'mobile_model', 
-    'is_logged_in', 'is_active', 'device_id','photo', 'token'];
+    'auth_token', 'is_active', 'device_id','photo', 'token'];
     const fields = [];
 
     keys.forEach(key =>{

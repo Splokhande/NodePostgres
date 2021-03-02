@@ -14,16 +14,15 @@ exports.create = (req,res) =>{
         dob: req.body.dob,
         gender: req.body.gender,
         age: req.body.age,
-        mobileNo: req.body.mobileNo,
+        mobile_no: req.body.mobile_no,
         status: req.body.status,
         email: req.body.email,
-        blockCount: req.body.blockCount,
-        mobileModel: req.body.mobileModel,
-        isLoggedIn: req.body.isLoggedIn,
+        block_count: req.body.block_count,
+        mobile_model: req.body.mobile_model,
+        auth_token: req.body.auth_token,
         active: req.body.active,
         post: req.body.post,
-        deviceId:req.body.deviceId,
-        
+        device_id:req.body.device_id,
     });
     User.create(user, (err, data) => {
         if (err)
