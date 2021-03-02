@@ -43,7 +43,7 @@ router.post('/login', async(request, response, next) => {
                     {
 
                         console.log("token generated and login successful");
-                        response.json(res.rows);
+                        response.status(200).json(res.rows);
                 }
               });
             });

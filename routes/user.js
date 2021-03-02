@@ -41,10 +41,10 @@ router.get('/getUser/:id', (request,response, next) =>{
         if(err) return next(err);
 
         if(res.rowCount === 0){
-            response.json({"message":"No User Found"});
+            response.status(400).json({error:"No User Found"});
         }
         else{
-        response.json(res.rows);
+        response.status(200).json({data:res.rows[0]});
     }
       });
 
