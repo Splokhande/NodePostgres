@@ -9,7 +9,7 @@ var User = require('../routes/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
-router.post('/login', (request, response, next) => {
+router.post('/login', async(request, response, next) => {
 
   
 
@@ -18,11 +18,16 @@ router.post('/login', (request, response, next) => {
     // console.log(request.body,email, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
-    user = pool.query("Select * from public.users WHERE email= $1 AND password = $2", 
-    [email,password])
-    .then((rows,err) =>{
+    pool.query("Select * from public.users WHERE email= $1 ", 
+    [email])
+    .then(async(rows,err) =>{
         if(err) return next(err);
         // Generate an access token
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        console.log(validPassword);
+        if(validPassword)
+      {
         const accessToken = jwt.sign({ username: rows.username,}, secret);
         // console.log(rows.rows[0].id, accessToken);
             pool.query(`UPDATE public.users SET auth_token = ($1) WHERE id =($2)`,
@@ -43,18 +48,18 @@ router.post('/login', (request, response, next) => {
                 }
               });
             });
-        // res.json({
-        //     accessToken
-        // });
-
+        }
+        else{
+            res.status(400).json({ error: "Invalid Password" });
+        }
       }
       );
 
-    if (user) {
-    }
-     else {
-        res.send('Username or password incorrect');
-    }
+    // if (user) {
+    // }
+    //  else {
+    //     res.send('Username or password incorrect');
+    // }
 });
 
 module.exports = router;

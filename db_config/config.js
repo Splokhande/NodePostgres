@@ -5,5 +5,5 @@ module.exports = {
   database: "thehj",
   port: 5432,
   secret: 'naksld1j5ais2hia8sdm5nakldn56aitiwgtiw7jjgjndsghaahbfjkabfafnfajfjjaa84siufd549dlk',
-  salt:27  
+  salt:3  
 };
