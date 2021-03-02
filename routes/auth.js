@@ -15,16 +15,15 @@ router.post('/login', async(request, response, next) => {
 
     // Read username and password from request body
     const { email, password } = request.body;
-    // console.log(request.body,email, password);
+    console.log(request.body,email, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
-    pool.query("Select * from public.users WHERE email= $1 ", 
-    [email])
+    await pool.query(`Select * from public.users WHERE email=$1 `,[email])
     .then(async(rows,err) =>{
         if(err) return next(err);
         // Generate an access token
-
-        const validPassword = await bcrypt.compare(password, user.password);
+        console.log(rows.rows[0].id);
+        const validPassword = await bcrypt.compare(password, rows.rows[0].password);
         console.log(validPassword);
         if(validPassword)
       {
@@ -50,7 +49,7 @@ router.post('/login', async(request, response, next) => {
             });
         }
         else{
-            res.status(400).json({ error: "Invalid Password" });
+            response.status(400).json({ error: "Invalid Password" });
         }
       }
       );
