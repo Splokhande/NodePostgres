@@ -51,18 +51,18 @@ router.get('/getUser/:id', (request,response, next) =>{
 });
 
 
-router.post('/', async (request,response, next) =>{
-const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
-console.log(password,saltRounds.salt);
-const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
-console.log(passwordHash);
-pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17)' ,
-[fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo], (err, res) =>{
-    if(err) return next(err);
-    console.log("created User: ",res.rowCount);
-    response.redirect('/user/getUser');
-  });
-});
+    router.post('/', async (request,response, next) =>{
+    const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
+    console.log(password,saltRounds.salt);
+    const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
+    console.log(passwordHash);
+    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17)' ,
+    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo], (err, res) =>{
+        if(err) return next(err);
+        console.log("created User: ",res.rowCount);
+        response.redirect('/user/getUser');
+    });
+    });
 
 router.put('/:id', (request,response, next) =>{
     const {id} = request.params;
