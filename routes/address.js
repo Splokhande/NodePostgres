@@ -3,23 +3,23 @@ const router = Router();
 const pool = require("../db");
 
 ///country
-router.post('/add/country', (request,response, next) =>{
-  const {name} = request.body;
-  pool.query('INSERT INTO country (name) VALUES ($1)' ,
-  [name], (err, res) =>{
-      if(err) return next(err);
-      console.log("New Country Added: ",res.rowCount);
-      response.json({"message":"success"});
+  router.post('/add/country', (request,response, next) => {
+    const {country} = request.body;
+    pool.query('INSERT INTO country (country) VALUES ($1)' ,
+    [country], (err, res) =>{
+        if(err) return next(err);
+        console.log("New Country Added: ",res.rowCount);
+        response.json({"message":"success"});
+      });
     });
-  });
 
   router.get('/get/country', (request,response, next) =>{
-    pool.query("Select * from country", (err, res) =>{
-        if(err) return next(err);
-        response.json(res.rows);
-      });
+      pool.query("Select * from country", (err, res) =>{
+          if(err) return next(err);
+          response.json(res.rows);
+        });
 
-});
+  });
 
 ///state
 router.post('/add/state', (request,response, next) =>{
@@ -33,11 +33,10 @@ router.post('/add/state', (request,response, next) =>{
   });
 
   router.get('/get/state', (request,response, next) =>{
-    pool.query("Select * from state INNER JOIN country on state.country_id = country.id", (err, res) =>{
+    pool.query("Select state_id,state,state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id", (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
-
 });
 
 ///district
@@ -52,7 +51,7 @@ router.post('/add/district', (request,response, next) =>{
   });
 
   router.get('/get/district', (request,response, next) =>{
-    pool.query("Select * from district", (err, res) =>{
+    pool.query("Select district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id", (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
