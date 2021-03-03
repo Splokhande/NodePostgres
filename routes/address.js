@@ -14,7 +14,7 @@ router.post('/add/country', (request,response, next) =>{
   });
 
   router.get('/get/country', (request,response, next) =>{
-    pool.query("Select * from users", (err, res) =>{
+    pool.query("Select * from country", (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -24,13 +24,22 @@ router.post('/add/country', (request,response, next) =>{
 ///state
 router.post('/add/state', (request,response, next) =>{
   const {state,country_id} = request.body;
-  pool.query('INSERT INTO state (state,country_id) VALUES ($1, $2)' ,
+  pool.query('INSERT INTO state  (state,country_id) VALUES ($1, $2)' ,
   [state,country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New State Added: ",res.rowCount);
       response.json({"message":"success"});
     });
   });
+
+  router.get('/get/state', (request,response, next) =>{
+    pool.query("Select * from state INNER JOIN country on state.country_id = country.id", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+
+});
+
 ///district
 router.post('/add/district', (request,response, next) =>{
   const {state_id,district} = request.body;
@@ -42,6 +51,14 @@ router.post('/add/district', (request,response, next) =>{
     });
   });
 
+  router.get('/get/district', (request,response, next) =>{
+    pool.query("Select * from district", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+
+});
+
 ///city
 router.post('/add/city', (request,response, next) =>{
   const {mc_id,city} = request.body;
@@ -52,6 +69,14 @@ router.post('/add/city', (request,response, next) =>{
       response.json({"message":"success"});
     });
   });
+  router.get('/get/city', (request,response, next) =>{
+    pool.query("Select * from city", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+
+});
+
 
 ///area
 router.post('/add/area', (request,response, next) =>{
@@ -64,12 +89,17 @@ router.post('/add/area', (request,response, next) =>{
     });
   });
 
-///muncipal_corporation
+  router.get('/get/area', (request,response, next) =>{
+    pool.query("Select * from area", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+
+});
+
+///municipal_corporation
 router.post('/add/mc', (request,response, next) =>{
   const {mc, district_id, state_id,city_id} = request.body;
-  console.log(password,saltRounds.salt);
-  const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
-  console.log(passwordHash);
   pool.query('INSERT INTO mc_list (mc, district_id, state_id,city_id) VALUES ($1, $2, $3, $4)' ,
   [mc, district_id, state_id,city_id], (err, res) =>{
       if(err) return next(err);
@@ -77,6 +107,14 @@ router.post('/add/mc', (request,response, next) =>{
       response.json({"message":"success"});
     });
   });
+
+  router.get('/get/mc', (request,response, next) =>{
+    pool.query("Select * from mc_list", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+
+});
 
 ///ward
 router.post('/add/ward', (request,response, next) =>{
@@ -88,3 +126,13 @@ pool.query('INSERT INTO mc_list (mc, district_id, state_id,city_id) VALUES ($1, 
     response.json({"message":"success"});
   });
 });
+
+router.get('/get/ward', (request,response, next) =>{
+  pool.query("Select * from wards", (err, res) =>{
+      if(err) return next(err);
+      response.json(res.rows);
+    });
+
+});
+
+module.exports = router;

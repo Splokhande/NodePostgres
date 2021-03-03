@@ -17,7 +17,7 @@ app.use((err,req,res,next) =>{
 app.use(bodyParser.json());
 app.use("/user", userDetail);
 app.use("/auth", auth);
-app.use('/address',)
+app.use('/address',address);
 // 
 const ports = 3000;
 app.listen(ports,()=> console.log(`listen on port ${ports}`));
