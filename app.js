@@ -9,6 +9,7 @@ const pool = new Pool({user, host, database, password, port});
 const userDetail = require("./routes/user");
 const auth = require("./routes/auth");
 const address = require("./routes/address");
+const society = require("./routes/society");
 const app = express();
 app.use((err,req,res,next) =>{
         res.json(err);
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use("/user", userDetail);
 app.use("/auth", auth);
 app.use('/address',address);
+app.use('/society',society);
 // 
 const ports = 3000;
 app.listen(ports,()=> console.log(`listen on port ${ports}`));
