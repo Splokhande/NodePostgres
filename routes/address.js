@@ -69,27 +69,7 @@ router.post('/add/city', (request,response, next) =>{
     });
   });
   router.get('/get/city', (request,response, next) =>{
-    pool.query("Select * from city", (err, res) =>{
-        if(err) return next(err);
-        response.json(res.rows);
-      });
-
-});
-
-
-///area
-router.post('/add/area', (request,response, next) =>{
-  const {ward_id,landmark,area} = request.body;
-  pool.query('INSERT INTO area (ward_id,landmark,area) VALUES ($1, $2)' ,
-  [ward_id,landmark,area], (err, res) =>{
-      if(err) return next(err);
-      console.log("New Area Added: ",res.rowCount);
-      response.json({"message":"success"});
-    });
-  });
-
-  router.get('/get/area', (request,response, next) =>{
-    pool.query("Select * from area", (err, res) =>{
+    pool.query("Select city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id", (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -98,17 +78,17 @@ router.post('/add/area', (request,response, next) =>{
 
 ///municipal_corporation
 router.post('/add/mc', (request,response, next) =>{
-  const {mc, district_id, state_id,city_id} = request.body;
-  pool.query('INSERT INTO mc_list (mc, district_id, state_id,city_id) VALUES ($1, $2, $3, $4)' ,
-  [mc, district_id, state_id,city_id], (err, res) =>{
+  const {mc, district_id, state_id,country_id} = request.body;
+  pool.query('INSERT INTO mc_list (mc, district_id, state_id,country_id) VALUES ($1, $2, $3, $4)' ,
+  [mc, district_id, state_id,country_id], (err, res) =>{
       if(err) return next(err);
-      console.log("New Muncipal Corporation Added: ",res.rowCount);
+      console.log("New Municipal Corporation Added: ",res.rowCount);
       response.json({"message":"success"});
     });
   });
 
   router.get('/get/mc', (request,response, next) =>{
-    pool.query("Select * from mc_list", (err, res) =>{
+    pool.query("Select mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id", (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -117,20 +97,40 @@ router.post('/add/mc', (request,response, next) =>{
 
 ///ward
 router.post('/add/ward', (request,response, next) =>{
-const {mc, district_id, state_id,city_id} = request.body;
-pool.query('INSERT INTO mc_list (mc, district_id, state_id,city_id) VALUES ($1, $2, $3, $4)' ,
-[mc, district_id, state_id,city_id], (err, res) =>{
+const {ward_no, mc_id , nagarsevak} = request.body;
+pool.query('INSERT INTO wards (ward_no, mc_id , nagarsevak) VALUES ($1, $2, $3)' ,
+[ward_no, mc_id , nagarsevak], (err, res) =>{
     if(err) return next(err);
-    console.log("New Municipal Corporation Added: ",res.rowCount);
+    console.log("New Ward Added: ",res.rowCount);
     response.json({"message":"success"});
   });
 });
 
 router.get('/get/ward', (request,response, next) =>{
-  pool.query("Select * from wards", (err, res) =>{
+  pool.query("Select wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id", (err, res) =>{
       if(err) return next(err);
       response.json(res.rows);
     });
+
+});
+
+
+///area
+router.post('/add/area', (request,response, next) =>{
+  const {ward_id,landmark,area} = request.body;
+  pool.query('INSERT INTO area (ward_id,landmark,area) VALUES ($1, $2,$3)' ,
+  [ward_id,landmark,area], (err, res) =>{
+      if(err) return next(err);
+      console.log("New Area Added: ",res.rowCount);
+      response.json({"message":"success"});
+    });
+  });
+
+  router.get('/get/area', (request,response, next) =>{
+    pool.query("Select area.area_id, area.area,area.landmark, wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id inner join area on area.ward_id = wards.ward_id", (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
 
 });
 
