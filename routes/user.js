@@ -50,6 +50,21 @@ router.get('/getUser/:id', (request,response, next) =>{
 
 });
 
+router.get('/getUserRoom/:id', (request,response, next) =>{
+    const {id} = request.params;
+    pool.query("Select users from users WHERE id = $1", [id], (err, res) =>{
+        if(err) return next(err);
+
+        if(res.rowCount === 0){
+            response.status(400).json({error:"No User Found"});
+        }
+        else{
+        response.status(200).json({data:res.rows[0]});
+    }
+      });
+
+});
+
 
     router.post('/', async (request,response, next) =>{
     const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
