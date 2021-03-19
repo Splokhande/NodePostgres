@@ -1,9 +1,6 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-
-
-
 router.put("/room/:id", (request, response, next) =>{
     const {id} = request.params;
     const keys = ['owner','on_rent', 'on_sale', 'carpet_area', 'room_structure', 'balcony',
