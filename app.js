@@ -14,7 +14,9 @@ const app = express();
 app.use((err,req,res,next) =>{
         res.json(err);
     });
-    
+app.get("/",(req,res)=>{
+    res.send("Hello World");
+});
 app.use(bodyParser.json());
 app.use("/user", userDetail);
 app.use("/auth", auth);
