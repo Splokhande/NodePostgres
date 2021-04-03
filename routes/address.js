@@ -117,9 +117,9 @@ router.get('/get/ward', (request,response, next) =>{
 
 ///area
 router.post('/add/area', (request,response, next) =>{
-  const {ward_id,landmark,area} = request.body;
-  pool.query('INSERT INTO area (ward_id,landmark,area) VALUES ($1, $2,$3)' ,
-  [ward_id,landmark,area], (err, res) =>{
+  const {ward_id,mc_id,area, city_id} = request.body;
+  pool.query('INSERT INTO area (ward_id,area,mc_id,city_it) VALUES ($1, $2,$3,$4)' ,
+  [ward_id,mc_id,area,city_id], (err, res) =>{
       if(err) return next(err);
       console.log("New Area Added: ",res.rowCount);
       response.json({"message":"success"});
