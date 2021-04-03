@@ -2,7 +2,7 @@ const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
 
-///country
+///country  
   router.post('/add/country', (request,response, next) => {
     const {country} = request.body;
     pool.query('INSERT INTO country (country) VALUES ($1)' ,
