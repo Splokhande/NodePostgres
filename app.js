@@ -21,6 +21,6 @@ app.use("/auth", auth);
 app.use('/address',address);
 app.use('/society',society);
 // 
-const ports = 3000;
-app.listen(ports,()=> console.log(`listen on port ${ports}`));
-module.exports = app;
+app.listen(process.env.PORT || 43190, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
