@@ -5,7 +5,8 @@ const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
-var currentTimeInMilliseconds=Date.now();
+var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});;
+
 // module.exports = app => {
     
 //     const user = require("../controllers/user");
