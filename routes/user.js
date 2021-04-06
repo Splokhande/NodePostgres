@@ -3,7 +3,9 @@ const router = Router();
 const pool = require("../db");
 const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
-
+const checkAuth = require('../routes/authenticateUser');
+const checkAdmin = require('../routes/authenticateAdmin');
+var currentTimeInMilliseconds=Date.now();
 // module.exports = app => {
     
 //     const user = require("../controllers/user");
@@ -66,13 +68,14 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
 });
 
 
-    router.post('/', async (request,response, next) =>{
+    router.post('/newUser', async (request,response, next) =>{
     const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
     console.log(password,saltRounds.salt);
     const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
     console.log(passwordHash);
-    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17)' ,
-    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo], (err, res) =>{
+    
+    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19)' ,
+    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
         if(err) return next(err);
         console.log("created User: ",res.rowCount);
         response.redirect('/user/getUser');
@@ -88,6 +91,13 @@ router.put('/:id', (request,response, next) =>{
     keys.forEach(key =>{
         if(request.body[key]) fields.push(key);
     });
+
+    pool.query(`UPDATE public.users SET updated_at = ($1) WHERE id =($2)`,
+        [currentTimeInMilliseconds, id], (err, res) =>{
+            if(err) return next(err);
+              if(index === fields.length - 1)
+              response.redirect('/user/getUser');
+          });
     fields.forEach((field, index) =>{
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2)`,
         [request.body[field], id], (err, res) =>{
