@@ -5,7 +5,7 @@ const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
-var currentTimeInMilliseconds=Date.now();
+var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});;
 // module.exports = app => {
     
 //     const user = require("../controllers/user");
@@ -34,7 +34,6 @@ router.get('/getUser', (request,response, next) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
-
 });
 
 router.get('/getUser/:id', (request,response, next) =>{
@@ -47,9 +46,8 @@ router.get('/getUser/:id', (request,response, next) =>{
         }
         else{
         response.status(200).json({data:res.rows[0]});
-    }
-      });
-
+        }
+    });
 });
 
 router.get('/getUserRoom/:id', (request,response, next) =>{
@@ -73,19 +71,25 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     console.log(password,saltRounds.salt);
     const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
     console.log(passwordHash);
-    
-    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19)' ,
-    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
+
+    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email,'+ 
+        'device_id, mobile_no, token, age, block_count, mobile_model, '+
+        'auth_token , is_active, password, status, photo, updated_at, created_at)'+ 
+   ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19)' +
+   ' Returning *' ,
+    [fname, lname, dob, gender, post, email, device_id, mobile_no, token, 
+        age, block_count, mobile_model, auth_token , is_active, passwordHash, 
+        status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
         if(err) return next(err);
-        console.log("created User: ",res.rowCount);
-        response.redirect('/user/getUser');
+        console.log("created User: ",res.rows[0]);
+        response.status(200).json({"data":res.rows[0]});
     });
     });
 
 router.put('/:id', (request,response, next) =>{
     const {id} = request.params;
-    const keys = ['fname','lname', 'dob', 'gender', 'post', 'age', 
-    'mobile_no','password', 'status', 'email', 'block_count', 'mobile_model', 
+    const keys = ['fname','lname', 'dob', 'gender', 'post', 'age',
+    'mobile_no','password', 'status', 'email', 'block_count', 'mobile_model',
     'auth_token', 'is_active', 'device_id','photo', 'token'];
     const fields = [];
     keys.forEach(key =>{
