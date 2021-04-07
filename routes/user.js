@@ -109,6 +109,9 @@ router.put('/:id', (request,response, next) =>{
 
           });
     fields.forEach((field, index) =>{
+        if(field === 'password'){
+            request.body[field] = await bcrypt.hashSync(request.body[field],saltRounds.salt);
+        }
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
         [request.body[field], id], (err, res) =>{
             if(err) return next(err);
