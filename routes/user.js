@@ -122,7 +122,7 @@ router.put('/:id', (request,response, next) =>{
         });
     });
 
-    router.put('/updatePassword/:id', (request, response, next) =>{
+    router.put('/updatePassword/:id', async (request, response, next) =>{
         const {id} = request.params;  
         const {password} = request.body;
         const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
