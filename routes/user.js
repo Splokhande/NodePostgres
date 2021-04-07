@@ -106,7 +106,7 @@ router.put('/:id', (request,response, next) =>{
     pool.query(`UPDATE public.users SET updated_at = ($1) WHERE id =($2) Returning *`,
         [currentTimeInMilliseconds, id], (err, res) =>{
             if(err) return next(err);
-             
+
           });
     fields.forEach((field, index) =>{
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
