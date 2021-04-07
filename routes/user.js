@@ -96,7 +96,7 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
 router.put('/:id', (request,response, next) =>{
     const {id} = request.params;
     const keys = ['fname','lname', 'dob', 'gender', 'post', 'age',
-    'mobile_no','password', 'status', 'email', 'block_count', 'mobile_model',
+    'mobile_no', 'status', 'email', 'block_count', 'mobile_model',
     'auth_token', 'is_active', 'device_id','photo', 'token'];
     const fields = [];
     keys.forEach(key =>{
@@ -109,9 +109,9 @@ router.put('/:id', (request,response, next) =>{
 
           });
     fields.forEach((field, index) =>{
-        if(field === 'password'){
-            request.body[field] = await bcrypt.hashSync(request.body[field],saltRounds.salt);
-        }
+        // if(field === 'password'){
+        //     request.body[field] = await bcrypt.hashSync(request.body[field],saltRounds.salt);
+        // }
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
         [request.body[field], id], (err, res) =>{
             if(err) return next(err);
@@ -121,6 +121,15 @@ router.put('/:id', (request,response, next) =>{
         });
     });
 
+    router.put('/updatePassword/:id', (request, response, next) =>{
+        const {id} = request.params;  
+        pool.query(`UPDATE public.users SET password = ($1) WHERE id =($2) Returning *`,
+        [request.password, id], (err, res) =>{
+            if(err) return next(err);
+              response.status(200);
+          });
+        });
+    });
     router.delete('/:id', (request,response,next) =>{
         const id = request.params;
 
