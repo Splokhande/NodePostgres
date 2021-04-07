@@ -88,8 +88,8 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
          if(err) return next(err);
 // >>>>>>> 147a07763157d5f50bea41a7e749ecc60229777d
-        console.log("created User: ",res.rows[0]);
-        response.status(200).json({"data":res.rows[0]});
+        console.log("created User: ",res.rows[0].id);
+        response.status(200).json({"data":res.rows[0].id});
     });
     });
 
