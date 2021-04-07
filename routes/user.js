@@ -130,7 +130,7 @@ router.put('/:id', (request,response, next) =>{
         pool.query(`UPDATE public.users SET password = ($1) WHERE id =($2) Returning *`,
         [passwordHash, id], (err, res) =>{
             if(err) return next(err);
-              response.status(200);
+              response.status(200).json({"message":"success"});
           });
         });
 
