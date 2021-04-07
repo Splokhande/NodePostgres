@@ -95,6 +95,7 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
 
 router.put('/:id', (request,response, next) =>{
     const {id} = request.params;
+   
     const keys = ['fname','lname', 'dob', 'gender', 'post', 'age',
     'mobile_no', 'status', 'email', 'block_count', 'mobile_model',
     'auth_token', 'is_active', 'device_id','photo', 'token'];
@@ -123,13 +124,16 @@ router.put('/:id', (request,response, next) =>{
 
     router.put('/updatePassword/:id', (request, response, next) =>{
         const {id} = request.params;  
+        const {password} = request.body;
+        const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
+   
         pool.query(`UPDATE public.users SET password = ($1) WHERE id =($2) Returning *`,
-        [request.password, id], (err, res) =>{
+        [passwordHash, id], (err, res) =>{
             if(err) return next(err);
               response.status(200);
           });
         });
-    });
+
     router.delete('/:id', (request,response,next) =>{
         const id = request.params;
 
