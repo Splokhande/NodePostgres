@@ -103,18 +103,17 @@ router.put('/:id', (request,response, next) =>{
         if(request.body[key]) fields.push(key);
     });
 
-    pool.query(`UPDATE public.users SET updated_at = ($1) WHERE id =($2)`,
+    pool.query(`UPDATE public.users SET updated_at = ($1) WHERE id =($2) Returning *`,
         [currentTimeInMilliseconds, id], (err, res) =>{
             if(err) return next(err);
-              if(index === fields.length - 1)
-              response.redirect('/user/getUser');
+             
           });
     fields.forEach((field, index) =>{
-        pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2)`,
+        pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
         [request.body[field], id], (err, res) =>{
             if(err) return next(err);
               if(index === fields.length - 1)
-              response.redirect('/user/getUser');
+              response.status(200).json({"data":res.rows[0]});
           });
         });
     });
