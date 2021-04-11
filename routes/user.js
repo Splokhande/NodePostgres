@@ -3,32 +3,17 @@ const router = Router();
 const pool = require("../db");
 const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
+const uploadFile = require('../functions/uploadPhoto.js');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
 var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});;
-// module.exports = app => {
-    
-//     const user = require("../controllers/user");
-
-//     // Create a new User
-//     app.post("/user", user.create);
-
-//     // Retrieve all User
-//     app.get("/user", user.get);
-
-//     // Retrieve a single User with UserId
-//     app.get("/user/:userId", user.findById);
-
-//     // Update a User with UserId
-//     app.put("/user/:userId", user.updateById);
-
-//     // Delete a User with UserId
-//     app.delete("/user/:userId", user.deleteById);
-
-//     // Delete a User
-//     app.delete("/user", user.deleteAll);
-//   };
-
+const Multer = require('multer');
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+    }
+  });
 router.get('/getUser', (request,response, next) =>{
     pool.query("Select * from users", (err, res) =>{
         if(err) return next(err);
@@ -71,23 +56,10 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     console.log(password,saltRounds.salt);
     const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
     console.log(passwordHash);
-// <<<<<<< HEAD
-
-//     pool.query('INSERT INTO users (fname, lname, dob, gender, post, email,'+
-//         'device_id, mobile_no, token, age, block_count, mobile_model, '+
-//         'auth_token , is_active, password, status, photo, updated_at, created_at)'+
-//    ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19)' +
-//    ' Returning *' ,
-//     [fname, lname, dob, gender, post, email, device_id, mobile_no, token,
-//         age, block_count, mobile_model, auth_token , is_active, passwordHash,
-//         status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
-//         if(err) return next(err);
-// =======
 
     pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19) RETURNING *' ,
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds], (err, res) =>{
          if(err) return next(err);
-// >>>>>>> 147a07763157d5f50bea41a7e749ecc60229777d
         console.log("created User: ",res.rows[0]);
         response.status(200).json({"data":res.rows[0]});
     });
@@ -133,6 +105,23 @@ router.put('/:id', (request,response, next) =>{
               response.status(200).json({"message":"success"});
           });
         });
+
+
+        router.put('/updatePhoto/:id',multer.single('file'), async (request, response, next) =>{
+            let file = req.file;
+            if (file) {
+                uploadFile(file).then((success) => {
+                res.status(200).send({
+                    status: 'success'
+                }).json({'message':"Photo uploaded"});
+                }).catch((error) => {
+                console.error(error);
+                });
+            }
+
+            });
+    
+    
 
     router.delete('/:id', (request,response,next) =>{
         const id = request.params;

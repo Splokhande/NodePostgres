@@ -14,7 +14,7 @@ router.post('/login', async(request, response, next) => {
   
 
     // Read username and password from request body
-    const { email, password } = request.body;
+    const { email, password,device_id, mobile_model } = request.body;
     console.log(request.body,email, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
@@ -29,8 +29,8 @@ router.post('/login', async(request, response, next) => {
       {
         const accessToken = jwt.sign({ username: rows.username,}, secret);
         // console.log(rows.rows[0].id, accessToken);
-            pool.query(`UPDATE public.users SET auth_token = ($1) WHERE id =($2)`,
-            [accessToken, rows.rows[0].id]).then((data, err) =>{
+            pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
+            [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
                 // console.log(data.rows);
                 pool.query("Select * from public.users WHERE id = $1",
                  [rows.rows[0].id], (err, res) =>{
@@ -41,7 +41,6 @@ router.post('/login', async(request, response, next) => {
                     }
                     else
                     {
-
                         console.log("token generated and login successful");
                         response.status(200).json(res.rows);
                 }

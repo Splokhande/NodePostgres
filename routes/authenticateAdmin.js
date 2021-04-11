@@ -1,13 +1,11 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-const { password } = require("../db_config/config");
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var User = require('./user');
 var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
+
 const {secret} =  require('../db_config/config');
 
 const authenticateJWT = async(req, res, next) =>  {
