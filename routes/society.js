@@ -1,9 +1,9 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
+const checkAdmin = require('./authenticateAdmin');
 
-
-router.post("/add/society",async(request,response,next) =>{
+router.post("/add/society",checkAdmin,async(request,response,next) =>{
   let soc_id =0;
     const{soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop}=request.body;
 

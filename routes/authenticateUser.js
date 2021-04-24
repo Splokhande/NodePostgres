@@ -21,7 +21,6 @@ const authenticateAdmin = (req, res, next) => {
                 console.log(err);
                 return res.sendStatus(403);
             }
-            
             req.user = user;
 
             next();
