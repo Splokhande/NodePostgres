@@ -41,17 +41,20 @@ router.post('/add/state', (request,response, next) =>{
 
 ///district
 router.post('/add/district', (request,response, next) =>{
-  const {state_id,mc_id,district} = request.body;
-  pool.query('INSERT INTO district (state_id,mc_id, district) VALUES ($1, $2, $3)' ,
-  [state_id,mc_id,district], (err, res) =>{
+ 
+  const {state_id,district} = request.body;
+  pool.query('INSERT INTO district (state_id, district) VALUES ($1, $2,) where id = ' ,
+  [state_id,district], (err, res) =>{
       if(err) return next(err);
       console.log("New District Added: ",res.rowCount);
       response.json({"message":"success"});
     });
   });
 
-  router.get('/get/district', (request,response, next) =>{
-    pool.query("Select district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id", (err, res) =>{
+  router.get('/get/district/:id', (request,response, next) =>{
+    const {id} = request.params;
+    // pool.query("Select district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id", (err, res) =>{
+      pool.query("Select * from district where state_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -61,16 +64,18 @@ router.post('/add/district', (request,response, next) =>{
 
 ///city
 router.post('/add/city', (request,response, next) =>{
-  const {mc_id,city} = request.body;
-  pool.query('INSERT INTO city (mc_id,city) VALUES ($1, $2)' ,
-  [mc_id,city], (err, res) =>{
+  const {district_id,city} = request.body;
+  pool.query('INSERT INTO city (city, district_id) VALUES ($1, $2)' ,
+  [city, district_id], (err, res) =>{
       if(err) return next(err);
       console.log("New City Added: ",res.rowCount);
       response.json({"message":"success"});
     });
   });
-  router.get('/get/city', (request,response, next) =>{
-    pool.query("Select city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id", (err, res) =>{
+  router.get('/get/city/:id', (request,response, next) =>{
+    const {id} = request.params;
+    // pool.query("Select city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id", (err, res) =>{
+      pool.query("Select * from city where district_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -98,17 +103,18 @@ router.put('/update/city/:id',(request, response, next) =>{
 
 ///area
 router.post('/add/area', (request,response, next) => {
-  const {ward_id, mc_id , area , city_id} = request.body;
-  pool.query('INSERT INTO area (ward_id, area, mc_id, city_id) VALUES ($1, $2,$3,$4)' ,
-  [ward_id,mc_id,area,city_id], (err, res) =>{
+  const {area , city_id} = request.body;
+  pool.query('INSERT INTO area (area, city_id) VALUES ($1, $2)' ,
+  [area,city_id], (err, res) =>{
       if(err) return next(err);
       console.log("New Area Added: ",res.rowCount);
       response.json({"message":"success"});
     });
   });
 
-  router.get('/get/area', (request,response, next) =>{
-    pool.query("Select area.area_id, area.area,area.landmark, wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id inner join area on area.ward_id = wards.ward_id", (err, res) =>{
+  router.get('/get/area/:id', (request,response, next) =>{
+    const {id} = request.params;
+    pool.query("Select * from area where city_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
@@ -147,9 +153,9 @@ router.post('/add/mc', (request,response, next) =>{
     });
   });
 
-  router.get('/get/mc', (request,response, next) =>{
+  router.get('/get/mc/:id', (request,response, next) =>{
     // pool.query("Select mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id", (err, res) =>{
-        pool.query("SELECT * from mc_list", (err, res) =>{
+        pool.query("SELECT * from mc_list where state_id = $1", [id], (err, res) =>{
         if(err) return next(err);
         response.json(res.rows);
       });
