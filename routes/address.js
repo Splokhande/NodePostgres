@@ -243,7 +243,6 @@ router.post('/add/address', (request,response, next) =>{
   router.get('/get/address/:district', (request,response, next) =>{
     const {district,city,mc,ward,state} = request.body;
     const query = `Select * from address where district = ${district}`;
-    const params;
     if(city != null){
       sql += ` and city = ${city}`;
       // params.post(city);
