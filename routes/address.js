@@ -34,8 +34,9 @@ router.post('/add/state', (request,response, next) =>{
     });
   });
 
-  router.get('/get/state', (request,response, next) =>{
-    pool.query("Select state_id,state,state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id", (err, res) =>{
+  router.get('/get/state/:id', (request,response, next) =>{
+    const {id} = request.params;
+    pool.query(`Select * from state where state_id = ${id}`, (err, res) =>{
         if(err) return next(err);
         response.json({
            "message":"success",
