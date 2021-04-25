@@ -40,7 +40,6 @@ router.post('/add/state', (request,response, next) =>{
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
 });
 
@@ -64,7 +63,6 @@ router.post('/add/district', (request,response, next) =>{
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
 
 });
@@ -88,7 +86,6 @@ router.post('/add/city', (request,response, next) =>{
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
 
 });
@@ -130,7 +127,6 @@ router.post('/add/area', (request,response, next) => {
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
 
 });
@@ -174,7 +170,6 @@ router.post('/add/mc', (request,response, next) =>{
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
 
 });
@@ -215,7 +210,6 @@ router.get('/get/ward', (request,response, next) =>{
       response.json({
             "message":success,
             "data":res.rows});
-        });
     });
 
 });
@@ -289,7 +283,6 @@ router.post('/add/address', (request,response, next) =>{
         response.json({
             "message":success,
             "data":res.rows});
-        });
       });
   });
   
