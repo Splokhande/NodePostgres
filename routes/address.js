@@ -15,7 +15,7 @@ const pool = require("../db");
 
   router.get('/get/country', (request,response, next) =>{
       pool.query("Select * from country", (err, res) =>{
-          if(err) return next(err);
+          if(err) return next(err);x
           response.json(res.rows);
         });
 
@@ -219,4 +219,73 @@ router.put('/update/ward/:id',(request, response, next) =>{
       });
 });
 
+
+
+///Address
+router.post('/add/address', (request,response, next) =>{
+  const {ward_no, mc_id ,country_id, nagarsevak} = request.body;
+  pool.query('INSERT INTO address (ward_no, mc_id , nagarsevak, country_id) VALUES ($1, $2, $3, $4)' ,
+  [ward_no, mc_id , nagarsevak, country_id], (err, res) =>{
+      if(err) return next(err);
+      console.log("New Ward Added: ",res.rowCount);
+      response.json({"message":"success"});
+    });
+  });
+  
+  router.put('/update/ward',(request, response, next) =>{
+    const {id} = request.params;
+  
+    const keys = ['ward','mc_id','country_id', 'nagarsevak'];
+    const fields = [];
+   
+  });
+
+  router.get('/get/address/:district', (request,response, next) =>{
+    const {district,city,mc,ward,state} = request.body;
+    const query = `Select * from address where district = ${district}`;
+    const params;
+    if(city != null){
+      sql += ` and city = ${city}`;
+      // params.post(city);
+    }
+
+    if(mc != null){
+      sql += ` and mc = ${mc}`;
+      // params.post(mc);
+    }
+    if(ward != null){
+      sql += ` and ward = ${ward}`;
+      // params.post(ward);
+    }
+    if(state != null){
+      sql += ` and state = ${state}`;
+      // params.post(state);
+    }
+
+    pool.query(
+      query,
+      // params, 
+      (err, res) =>{
+        if(err) return next(err);
+        response.json(res.rows);
+      });
+  });
+  
+  router.put('/update/address/:id',(request, response, next) =>{
+    const {id} = request.params;
+    const keys = ['ward','mc','area', 'city','landmark', 'district'];
+    const fields = [];
+    keys.forEach(key =>{
+        if(request.body[key]) fields.push(key);
+    });
+  
+    fields.forEach((field, index) =>{
+        pool.query(`UPDATE public.wards SET ${field} = ($1) WHERE id =($2) Returning *`,
+        [request.body[field], id], (err, res) =>{
+            if(err) return next(err);
+              if(index === fields.length - 1)
+              response.status(200).json({"data":res.rows[0]});
+          });
+        });
+  });
 module.exports = router;
