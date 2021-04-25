@@ -39,7 +39,8 @@ router.post('/add/state', (request,response, next) =>{
         if(err) return next(err);
         response.json({
             "message":success,
-            "data":res.rows});
+            "data":res.rows
+          });
       });
 });
 
