@@ -15,7 +15,7 @@ const pool = require("../db");
 
   router.get('/get/country', (request,response, next) =>{
       pool.query("Select * from country", (err, res) =>{
-          if(err) return next(err);x
+          if(err) return next(err);
           response.json(res.rows);
         });
 
@@ -288,4 +288,5 @@ router.post('/add/address', (request,response, next) =>{
           });
         });
   });
+
 module.exports = router;

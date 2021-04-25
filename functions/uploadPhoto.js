@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var User = require('../routes/user');
-const googleStorage = require('@google-cloud/storage');
+const {googleStorage} = require('@google-cloud/storage');
 const Multer = require('multer');
 
 const storage = googleStorage({
@@ -14,7 +14,7 @@ const storage = googleStorage({
   keyFilename: "/firebase/private_key.js"
 });
 
-const bucket = storage.bucket("<Firebase Storage Bucket URL");
+const bucket = storage.bucket("parisar-17-5-2020.appspot.com");
 
 const multer = Multer({
   storage: Multer.memoryStorage(),
