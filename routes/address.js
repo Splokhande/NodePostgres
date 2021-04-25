@@ -17,7 +17,7 @@ const pool = require("../db");
       pool.query("Select * from country", (err, res) =>{
           if(err) return next(err);
           response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
         });
 
@@ -38,7 +38,7 @@ router.post('/add/state', (request,response, next) =>{
     pool.query("Select state_id,state,state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id", (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows
           });
       });
@@ -62,7 +62,7 @@ router.post('/add/district', (request,response, next) =>{
       pool.query("Select * from district where state_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
       });
 
@@ -85,7 +85,7 @@ router.post('/add/city', (request,response, next) =>{
       pool.query("Select * from city where district_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
       });
 
@@ -126,7 +126,7 @@ router.post('/add/area', (request,response, next) => {
     pool.query("Select * from area where city_id = $1",[id], (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
       });
 
@@ -169,7 +169,7 @@ router.post('/add/mc', (request,response, next) =>{
         pool.query("SELECT * from mc_list where state_id = $1", [id], (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
       });
 
@@ -209,7 +209,7 @@ router.get('/get/ward', (request,response, next) =>{
   pool.query("Select wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id", (err, res) =>{
       if(err) return next(err);
       response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
     });
 
@@ -282,7 +282,7 @@ router.post('/add/address', (request,response, next) =>{
       (err, res) =>{
         if(err) return next(err);
         response.json({
-            "message":success,
+           "message":"success",
             "data":res.rows});
       });
   });
