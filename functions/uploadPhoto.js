@@ -6,10 +6,10 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var User = require('../routes/user');
-var googleStorage = require('@google-cloud/storage');
+var Cloud  = require('@google-cloud/storage');
 const Multer = require('multer');
-
-const storage = googleStorage({
+const { Storage } = Cloud
+const storage = new Storage({
   projectId: "parisar-17-5-2020",
   keyFilename: "/firebase/private_key.js"
 });
