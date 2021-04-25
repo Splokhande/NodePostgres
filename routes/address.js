@@ -16,7 +16,9 @@ const pool = require("../db");
   router.get('/get/country', (request,response, next) =>{
       pool.query("Select * from country", (err, res) =>{
           if(err) return next(err);
-          response.json(res.rows);
+          response.json({
+            "message":success,
+            "data":res.rows});
         });
 
   });
@@ -35,7 +37,10 @@ router.post('/add/state', (request,response, next) =>{
   router.get('/get/state', (request,response, next) =>{
     pool.query("Select state_id,state,state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id", (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
 });
 
@@ -56,7 +61,10 @@ router.post('/add/district', (request,response, next) =>{
     // pool.query("Select district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id", (err, res) =>{
       pool.query("Select * from district where state_id = $1",[id], (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
 
 });
@@ -77,7 +85,10 @@ router.post('/add/city', (request,response, next) =>{
     // pool.query("Select city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id", (err, res) =>{
       pool.query("Select * from city where district_id = $1",[id], (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
 
 });
@@ -116,7 +127,10 @@ router.post('/add/area', (request,response, next) => {
     const {id} = request.params;
     pool.query("Select * from area where city_id = $1",[id], (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
 
 });
@@ -157,7 +171,10 @@ router.post('/add/mc', (request,response, next) =>{
     // pool.query("Select mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id", (err, res) =>{
         pool.query("SELECT * from mc_list where state_id = $1", [id], (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
 
 });
@@ -195,7 +212,10 @@ pool.query('INSERT INTO wards (ward_no, mc_id , nagarsevak, country_id) VALUES (
 router.get('/get/ward', (request,response, next) =>{
   pool.query("Select wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.district_id = district.district_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id", (err, res) =>{
       if(err) return next(err);
-      response.json(res.rows);
+      response.json({
+            "message":success,
+            "data":res.rows});
+        });
     });
 
 });
@@ -266,7 +286,10 @@ router.post('/add/address', (request,response, next) =>{
       // params, 
       (err, res) =>{
         if(err) return next(err);
-        response.json(res.rows);
+        response.json({
+            "message":success,
+            "data":res.rows});
+        });
       });
   });
   

@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 var User = require('../routes/user');
 var Cloud  = require('@google-cloud/storage');
 const Multer = require('multer');
-const { Storage } = Cloud
+const { Storage } = Cloud;
 const storage = new Storage({
   projectId: "parisar-17-5-2020",
   keyFilename: "/firebase/private_key.js"
