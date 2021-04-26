@@ -36,7 +36,7 @@ router.post('/add/state', (request,response, next) =>{
 
   router.get('/get/state/:id', (request,response, next) =>{
     const {id} = request.params;
-    pool.query(`Select * from state where state_id = ${id}`, (err, res) =>{
+    pool.query('Select * from state where state_id = $1',[id], (err, res) =>{
         if(err) return next(err);
         response.json({
            "message":"success",
