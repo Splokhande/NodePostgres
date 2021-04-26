@@ -34,7 +34,7 @@ router.post('/add/state', (request,response, next) =>{
   [state,country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New State Added: ",res.rowCount);
-      response.redirect(`address/get/state/${country_id}`);
+      response.send('get/state/${1}',[country_id]);
     });
   });
 
