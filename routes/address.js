@@ -9,6 +9,7 @@ const pool = require("../db");
     [country], (err, res) =>{
         if(err) return next(err);
         console.log("New Country Added: ",res.rowCount);
+
         response.json({
            "message":"success",
             "data":res.rows
@@ -33,10 +34,8 @@ router.post('/add/state', (request,response, next) =>{
   [state,country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New State Added: ",res.rowCount);
-      response.json({
-           "message":"success",
-            "data":res.rows
-          });
+      
+      response.redirect(`/get/state/${country_id}`);
     });
   });
 
