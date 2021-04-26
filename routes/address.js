@@ -9,7 +9,10 @@ const pool = require("../db");
     [country], (err, res) =>{
         if(err) return next(err);
         console.log("New Country Added: ",res.rowCount);
-        response.json({"message":"success"});
+        response.json({
+           "message":"success",
+            "data":res.rows
+          });
       });
     });
 
@@ -30,7 +33,10 @@ router.post('/add/state', (request,response, next) =>{
   [state,country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New State Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+           "message":"success",
+            "data":res.rows
+          });
     });
   });
 
@@ -53,7 +59,10 @@ router.post('/add/district', (request,response, next) =>{
   [state_id,district], (err, res) =>{
       if(err) return next(err);
       console.log("New District Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+        "message":"success",
+         "data":res.rows
+       });
     });
   });
 
@@ -77,7 +86,10 @@ router.post('/add/city', (request,response, next) =>{
   [city, district_id], (err, res) =>{
       if(err) return next(err);
       console.log("New City Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+           "message":"success",
+            "data":res.rows
+          });
     });
   });
   router.get('/get/city/:id', (request,response, next) =>{
@@ -118,7 +130,10 @@ router.post('/add/area', (request,response, next) => {
   [area,city_id], (err, res) =>{
       if(err) return next(err);
       console.log("New Area Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+           "message":"success",
+            "data":res.rows
+          });
     });
   });
 
@@ -161,7 +176,10 @@ router.post('/add/mc', (request,response, next) =>{
   [mc, country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New Municipal Corporation Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+           "message":"success",
+            "data":res.rows
+          });
     });
   });
 
@@ -202,7 +220,10 @@ pool.query('INSERT INTO wards (ward_no, mc_id , nagarsevak, country_id) VALUES (
 [ward_no, mc_id , nagarsevak, country_id], (err, res) =>{
     if(err) return next(err);
     console.log("New Ward Added: ",res.rowCount);
-    response.json({"message":"success"});
+    response.json({
+           "message":"success",
+            "data":res.rows
+          });
   });
 });
 
@@ -244,7 +265,10 @@ router.post('/add/address', (request,response, next) =>{
   [ward_no, mc_id , nagarsevak, country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New Ward Added: ",res.rowCount);
-      response.json({"message":"success"});
+      response.json({
+           "message":"success",
+            "data":res.rows
+          });
     });
   });
   
