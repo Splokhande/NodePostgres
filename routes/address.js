@@ -30,11 +30,14 @@ const pool = require("../db");
 ///state
 router.post('/add/state', (request,response, next) =>{
   const {state,country_id} = request.body;
-  pool.query('INSERT INTO state  (state,country_id) VALUES ($1, $2)' ,
+  pool.query('INSERT INTO state  (state,country_id) VALUES ($1, $2) returning * ' ,
   [state,country_id], (err, res) =>{
       if(err) return next(err);
       console.log("New State Added: ",res.rowCount);
-      response.send('get/state/${1}',[country_id]);
+      response.json({
+        "message":"success",
+         "data":res.rows
+       });
     });
   });
 
