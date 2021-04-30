@@ -307,6 +307,7 @@ router.post('/add/address', (request,response, next) =>{
       sql += ` and mc = ${mc}`;
       // params.post(mc);
     }
+    
     if(ward != null){
       sql += ` and ward = ${ward}`;
       // params.post(ward);
