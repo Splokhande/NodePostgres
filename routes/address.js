@@ -296,33 +296,45 @@ router.post('/add/address', (request,response, next) =>{
 
   router.get('/get/address/:id', (request,response, next) =>{
     const {id} = request.params;
-    const {district,city,mc,ward,state} = request.body;
-    const query = `Select * from address where id = ${id}`;
-    if(city != null){
-      sql += ` and city = ${city}`;
-      // params.post(city);
-    }
 
-    if(mc != null){
-      sql += ` and mc = ${mc}`;
-      // params.post(mc);
-    }
+    const {district,city,mc,ward,state} = request.body;
+    // const query = `Select * from address`;
+    // var data = "";
+
+    // if(query.endsWith("address")){
+    //   data += ' where';
+    // }
+    // if(!query.endsWith("address"))
+
+    // if(id != null){
+    //   data += ` id = ${id}`;
+    // }
+
+    // if(city != null){
+    //   data += ` and city = ${city}`;
+    //   // params.post(city);
+    // }
+
+    // if(mc != null){
+    //   data += ` and mc = ${mc}`;
+    //   // params.post(mc);
+    // }
     
-    if(ward != null){
-      sql += ` and ward = ${ward}`;
-      // params.post(ward);
-    }
-    if(state != null){
-      sql += ` and state = ${state}`;
-      // params.post(state);
-    }
-    if(district != null){
-      sql += ` and district = ${district}`;
-      // params.post(state);
-    }
+    // if(ward != null){
+    //   data += ` and ward = ${ward}`;
+    //   // params.post(ward);
+    // }
+    // if(state != null){
+    //   data += ` and state = ${state}`;
+    //   // params.post(state);
+    // }
+    // if(district != null){
+    //   data += ` and district = ${district}`;
+    //   // params.post(state);
+    // }
 
     pool.query(
-      query,
+      `Select * from address where id = $1`,[id],
       // params, 
       (err, res) =>{
         if(err) return next(err);
