@@ -294,9 +294,10 @@ router.post('/add/address', (request,response, next) =>{
 
   });
 
-  router.get('/get/address/:district', (request,response, next) =>{
+  router.get('/get/address/:id', (request,response, next) =>{
+    const {id} = request.params;
     const {district,city,mc,ward,state} = request.body;
-    const query = `Select * from address where district = ${district}`;
+    const query = `Select * from address where id = ${id}`;
     if(city != null){
       sql += ` and city = ${city}`;
       // params.post(city);
@@ -312,6 +313,10 @@ router.post('/add/address', (request,response, next) =>{
     }
     if(state != null){
       sql += ` and state = ${state}`;
+      // params.post(state);
+    }
+    if(district != null){
+      sql += ` and district = ${district}`;
       // params.post(state);
     }
 
