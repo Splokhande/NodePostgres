@@ -294,7 +294,7 @@ router.post('/add/address', (request,response, next) =>{
 
   });
 
-  router.get('/get/address/:id', (request,response, next) =>{
+  router.get('/get/address', (request,response, next) =>{
     const {id} = request.params;
 
     const {district,city,mc,ward,state} = request.body;
@@ -334,7 +334,7 @@ router.post('/add/address', (request,response, next) =>{
     // }
 
     pool.query(
-      `Select * from address where id = $1`,[id],
+      `Select * from address`,
       // params, 
       (err, res) =>{
         if(err) return next(err);
