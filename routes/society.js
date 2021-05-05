@@ -8,7 +8,7 @@ router.post("/add/society",checkAdmin,async(request,response,next) =>{
 const {post} = request.user;
 console.log("Post "+post);
 if(post !== "superadmin"){
-    return response.sendStatus(403).json(
+    return response.json(
       {
         "message":"You are not authorized for this",
       }
