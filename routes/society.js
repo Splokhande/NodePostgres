@@ -5,7 +5,7 @@ const checkAdmin = require('./authenticateUser');
 
 router.post("/add/society",checkAdmin,async(request,response,next) =>{
 
-const {post} = request.user;
+const {post} = request.user.post;
 console.log("Post "+post);
 if(post !== "superadmin"){
     return response.json(
