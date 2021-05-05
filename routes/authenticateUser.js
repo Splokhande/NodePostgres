@@ -16,7 +16,7 @@ const authenticateAdmin = (req, res, next) => {
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        const verified = jwt.verify(token, config.TOKEN_SECRET);
+        const verified = jwt.verify(token, secret);
         console.log(verified);
         if(verified.post === "superadmin"){
             req.user = verified;
