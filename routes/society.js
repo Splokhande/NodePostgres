@@ -10,6 +10,7 @@ console.log("Post "+post);
 if(post !== "superadmin"){
     return response.json(
       {
+        "post":post,
         "message":"You are not authorized for this",
       }
     )
