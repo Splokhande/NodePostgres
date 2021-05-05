@@ -18,7 +18,7 @@ const authenticateJWT = async(req, res, next) =>  {
             console.log(token);
             await pool.query("Select * from users where auth_token = $1",[token])
             .then(async(row,err)=> {
-                console.log(row.rows[0].post);
+                console.log(row.rows[0]);
              const reqUser = row.rows[0];
              if (err) {
                 console.log(err);
