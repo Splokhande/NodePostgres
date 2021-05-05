@@ -5,15 +5,17 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var jwt = require('jsonwebtoken');
-
+var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
+
 
 const authenticateJWT = async(req, res, next) =>  {
     const authHeader = req.headers.authorization;
     
     if (authHeader) {
         const token = authHeader.split(' ')[1];
-
+        console.log(authHeader);
+        console.log(token);
         jwt.verify(token, secret, async(err, user) => {
             console.log(token);
            
