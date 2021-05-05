@@ -15,12 +15,12 @@ const authenticateJWT = async(req, res, next) =>  {
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         console.log(authHeader);
-        console.log(token);
         jwt.verify(token, secret, async(err, user) => {
             console.log(token);
            
             console.log(user);
             const reqUser = user;
+            console.log(reqUser.post);
             if (err) {
                console.log(err);
                return res.sendStatus(403);

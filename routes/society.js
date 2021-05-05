@@ -1,9 +1,19 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-const checkAdmin = require('./authenticateAdmin');
+const checkAdmin = require('./authenticateUser');
 
 router.post("/add/society",checkAdmin,async(request,response,next) =>{
+
+const {post} = req.user;
+if(post !== "superadmin"){
+    return response.sendStatus(403).json(
+      {
+        "message":"You are not authorized for this",
+      }
+    )
+}
+
   let soc_id =0;
     const{soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude}=request.body;
 
