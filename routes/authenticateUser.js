@@ -16,16 +16,23 @@ const authenticateAdmin = (req, res, next) => {
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, secret, (err, user) => {
-            if (err) {
-                console.log(err);
-                return res.sendStatus(403);
-            }
-            console.log(user);
-            req.user = user;
+        const verified = jwt.verify(token, config.TOKEN_SECRET);
+        console.log(verified);
+        if(verified.post === "superadmin"){
+            req.user = verified;
             next();
-        });
-    } else {
+        }
+        // jwt.verify(token, secret, (err, user) => {
+        //     if (err) {
+        //         console.log(err);
+        //         return res.sendStatus(403);
+        //     }
+        //     console.log(user);
+        //     req.user = user;
+        //     next();
+        // });
+    } 
+    else {
         res.json({"message": "Unauthorized User"});;
        
     }
