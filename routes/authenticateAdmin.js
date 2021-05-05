@@ -16,21 +16,19 @@ const authenticateJWT = async(req, res, next) =>  {
 
         jwt.verify(token, secret, async(err, user) => {
             console.log(token);
-            await pool.query("Select * from users where auth_token = $1",[token])
-            .then(async(row,err)=> {
-                console.log(row.rows[0]);
-             const reqUser = row.rows[0];
-             if (err) {
-                console.log(err);
-                return res.sendStatus(403);
-            }
-            if(reqUser.post === "superadmin"){
-                req.user = reqUser;
-                next();
-            }else{
-                res.json({"message": "Invalid User"});;
-            }
-            });
+           
+            console.log(user);
+            const reqUser = user;
+            if (err) {
+               console.log(err);
+               return res.sendStatus(403);
+           }
+           if(reqUser.post === "superadmin"){
+               req.user = reqUser;
+               next();
+           }else{
+               res.json({"message": "Invalid User"});;
+           }
             // console.log(user);
             
 
