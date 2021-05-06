@@ -4,6 +4,7 @@ const pool = require("../db");
 const checkAdmin = require('./authenticateUser');
 
 router.post("/add/society",checkAdmin,async(request,response,next) =>{
+console.log(request.user);
 const {post} = request.user;
 console.log("Post "+post);
 if(post !== "superadmin"){
