@@ -27,7 +27,7 @@ router.post('/login', async(request, response, next) => {
         console.log(validPassword);
         if(validPassword)
       {
-        const accessToken = jwt.sign({ username: rows.username,}, secret);
+        const accessToken = jwt.sign({ username: rows.username,post: rows.post}, secret);
         // console.log(rows.rows[0].id, accessToken);
             pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
             [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
