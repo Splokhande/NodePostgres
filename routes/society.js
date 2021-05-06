@@ -20,7 +20,8 @@ if(post !== "superadmin"){
     const{soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude}=request.body;
 
     pool.query('INSERT INTO society (soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude,longitude) VALUES ($1, $2,$3,$4,$5,$6,$7,$8, $9, $10, $11) RETURNING *' ,
-    [soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude],(err, res) =>{
+    [soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude],
+    (err, res) =>{
       if(err) return next(err);
       const blocks = total_block;
       const floors =total_floor;
@@ -63,9 +64,10 @@ if(post !== "superadmin"){
               // respo.json({"message":"Society Body created successfully"});
             });
             console.log("New Society Added: ",res.rowCount);
+            response.json({"message":"success","total_rooms":total_room, "total_shop":total_shop});
+
       });
-      response.json({"message":"success","total_rooms":total_room, "total_shop":total_shop});
-  });
+      });
 
 router.get('/get/society/:id', (request,response, next) =>{
 
