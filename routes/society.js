@@ -80,9 +80,9 @@ router.get('/get/society/:id', async (request,response, next) =>{
   }
   console.log(id);
   const result = await  pool.query(
-    sql`Select s.*
+    `Select s.*
         ${nestQuery(
-            sql`Select r.* from rooms where soc_id = s.soc_id`
+            `Select r.* from rooms where soc_id = s.soc_id`
         )} AS rooms from society`
   );
    pool.query(result, (err, res) =>{
