@@ -2,7 +2,7 @@ const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
 const checkAdmin = require('./authenticateUser');
-
+const sql = require("databases/pg");
 router.post("/add/society",checkAdmin,async(request,response,next) =>{
 console.log(request.user);
 const {post} = request.user;
@@ -80,9 +80,9 @@ router.get('/get/society/:id', async (request,response, next) =>{
   }
   console.log(id);
   const result = await  pool.query(
-    `Select s.*
+    sql`Select s.*
         ${nestQuery(
-            `Select r.* from rooms where soc_id = s.soc_id`
+          sql`Select r.* from rooms where soc_id = s.soc_id`
         )} AS rooms from society`
   );
    pool.query(result, (err, res) =>{

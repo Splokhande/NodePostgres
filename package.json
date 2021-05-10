@@ -28,6 +28,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
-    "two-step-auth": "^1.1.2"
+    "two-step-auth": "^1.1.2",
+    "databases/pg":"0.0.0"
   }
 }
