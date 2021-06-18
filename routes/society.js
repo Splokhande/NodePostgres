@@ -73,18 +73,21 @@ router.get('/get/society', async (request,response, next) =>{
 
   const id = request.params.id; 
   var query;
-  if(id === ""&& id === null){
+  if(id === ""&& id == null){
       query = "Select * from society ";
   }else{
     query = `Select * from society where id = ${id}`;
   }
   console.log(id);
   const result = await  pool.query(
-    query
-  );
+    "Select * from society"
+      );
    pool.query(result, (err, res) =>{
         if(err) return next(err);
-         response.json(res.rows);
+         response.statusCode(200).json({
+          "message":Success,
+           "data":res.rows
+          });
       });
 });
 router.get('/get/society/:id', async (request,response, next) =>{
