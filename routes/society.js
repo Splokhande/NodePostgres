@@ -1,7 +1,6 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-const connect = require("../db");
 const checkAdmin = require('./authenticateUser');
 
 router.post("/add/society",checkAdmin,async(request,response,next) =>{
@@ -70,6 +69,24 @@ if(post !== "superadmin"){
       });
       });
 
+router.get('/get/society', async (request,response, next) =>{
+
+  const id = request.params.id; 
+  var query;
+  if(id === ""&& id === null){
+      query = "Select * from society ";
+  }else{
+    query = `Select * from society where id = ${id}`;
+  }
+  console.log(id);
+  const result = await  pool.query(
+    query
+  );
+   pool.query(result, (err, res) =>{
+        if(err) return next(err);
+         response.json(res.rows);
+      });
+});
 router.get('/get/society/:id', async (request,response, next) =>{
 
   const id = request.params.id; 
@@ -81,10 +98,7 @@ router.get('/get/society/:id', async (request,response, next) =>{
   }
   console.log(id);
   const result = await  pool.query(
-    connect`Select s.*
-        ${nestQuery(
-          connect`Select r.* from rooms where soc_id = s.soc_id`
-        )} AS rooms from society`
+    query
   );
    pool.query(result, (err, res) =>{
         if(err) return next(err);
