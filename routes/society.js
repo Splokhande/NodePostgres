@@ -90,8 +90,9 @@ router.get('/get/society/:id', async (request,response, next) =>{
   console.log(id);
    pool.query( `Select * from society where id = ${id}`, (err, res) =>{
         if(err){
-          res.status(500);
-          return next(err);}
+          response.status(500);
+          return next(err);
+        }
          response.json(res.rows);
       });
 });
