@@ -16,7 +16,8 @@ const multer = Multer({
   });
 router.get('/getUser', (request,response, next) =>{
     pool.query("Select * from users", (err, res) =>{
-        if(err) return next(err);
+        if(err){res.status(500);
+             return next(err);}
         response.json(res.rows);
       });
 });
@@ -24,7 +25,9 @@ router.get('/getUser', (request,response, next) =>{
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
     pool.query("Select * from public.users WHERE id = $1", [id], (err, res) =>{
-        if(err) return next(err);
+        if(err){
+            res.status(500);
+            return next(err);}
 
         if(res.rowCount === 0){
             response.status(400).json({error:"No User Found"});

@@ -19,10 +19,13 @@ if(post !== "superadmin"){
   let soc_id =0;
     const{soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude}=request.body;
 
-    pool.query('INSERT INTO society (soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude,longitude) VALUES ($1, $2,$3,$4,$5,$6,$7,$8, $9, $10, $11) RETURNING *' ,
+    pool.query('INSERT INTO society (soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude,longitude)'+
+    'VALUES ($1, $2,$3,$4,$5,$6,$7,$8, $9, $10, $11) RETURNING *' ,
     [soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude],
     (err, res) =>{
-      if(err) return next(err);
+      if(err){
+        res.status(500);
+        return next(err);}
       const blocks = total_block;
       const floors =total_floor;
       const rooms = rooms_each_floor;
@@ -70,43 +73,48 @@ if(post !== "superadmin"){
       });
 
 router.get('/get/society', async (request,response, next) =>{
-
-  const id = request.params.id; 
-  var query;
-  if(id === ""&& id == null){
-      query = "Select * from society ";
-  }else{
-    query = `Select * from society where id = ${id}`;
-  }
-  console.log(id);
-  const result = await  pool.query(
-    "Select * from society"
-      );
-   pool.query(result, (err, res) =>{
-        if(err) return next(err);
+   pool.query("Select * from society", (err, res) =>{
+        if(err){
+          res.status(500);
+          return next(err);
+        }
          response.statusCode(200).json({
-          "message":Success,
+          "message":"Success",
            "data":res.rows
           });
       });
 });
 router.get('/get/society/:id', async (request,response, next) =>{
 
-  const id = request.params.id; 
-  var query;
-  if(id !== ""&& id !== null){
-      query = "Select * from society ";
-  }else{
-    query = `Select * from society where id = ${id}`;
-  }
+  const id = request.params.id;
   console.log(id);
-  const result = await  pool.query(
-    query
-  );
-   pool.query(result, (err, res) =>{
-        if(err) return next(err);
+   pool.query( `Select * from society where id = ${id}`, (err, res) =>{
+        if(err){
+          res.status(500);
+          return next(err);}
          response.json(res.rows);
       });
 });
+
+
+router.put('/update/society/:id', async (request,response, next)=>{
+  const {id} = request.params;
+    const keys = ['soc_name','landmark','soc_reg_no','soc_address_id','total_room','total_floor','total_block','rooms_each_floor','total_shop,latitude','longitude'];
+    const fields = [];
+    keys.forEach(key =>{
+        if(request.body[key]) fields.push(key);
+    });
+    fields.forEach((field, index) =>{
+        pool.query(`UPDATE public.society SET ${field} = ($1) WHERE room_id =($2)`,
+        [request.body[field], id], (err, res) =>{
+            if(err){
+              res.status(500);
+              return next(err);}
+              if(index === fields.length - 1)
+              response.redirect('/user/getUser');
+          });
+        });
+});
+
 
 module.exports = router;
