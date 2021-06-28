@@ -18,9 +18,7 @@ router.get('/get/socBody', async(request,response,next)=>{
 
 router.post("/create/socBody",async(request,response,next)=>{
     const {soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year} = request.body;
-    console.log(password,saltRounds.salt);
-    const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
-    console.log(passwordHash);
+
 
     pool.query('INSERT INTO soc_body (soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9) Returning *' ,
     [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],(err, resp) =>{
@@ -29,7 +27,8 @@ router.post("/create/socBody",async(request,response,next)=>{
       // respo.json({"message":"Society Body created successfully"});
     });
     console.log("New Society Body Added: ",res.rowCount);
-    response.json({"message":"success",
+    response.json({
+        "message":"success",
     // "total_rooms":total_room, "total_shop":total_shop
         "data": res.rows
 });
