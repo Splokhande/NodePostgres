@@ -20,7 +20,7 @@ router.put("/update/socBody/:soc_body_id", async(request,response,next)=>{
     const {soc_body_id} = request.params;
     const keys = ['chairman', 'secretary', 'treasurer', 'vice_chairman','vice_secretary', 'vice_treasurer','members'];
     const fields = [];
-    console.log(request.body[key]);
+
     console.log(soc_body_id);
     keys.forEach(key =>{
         if(request.body[key]) fields.push(key);
