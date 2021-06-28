@@ -9,6 +9,8 @@ router.put("update/socBody/:id",checkJWT, async(request,response,next)=>{
     const {id} = request.params;
     const keys = ['chairman', 'secretary', 'treasurer', 'vice_chairman','vice_secretary', 'vice_treasurer','members'];
     const fields = [];
+    console.log(request.body[key]);
+    console.log(id);
     keys.forEach(key =>{
         if(request.body[key]) fields.push(key);
     });
