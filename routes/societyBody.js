@@ -5,6 +5,15 @@ const router = Router();
 const pool = require("../db");
 const checkJWT = require('./authenticateAdmin');
 
+
+router.get('get/socBody', async(request,response,next)=>{
+    pool.query('Select * from soc_body',(err,res)=>{
+        if(err){res.status(500);
+            return next(err);}
+       response.json(res.rows);
+    });
+});
+
 router.put("update/socBody/:soc_body_id", async(request,response,next)=>{
     const {soc_body_id} = request.params;
     const keys = ['chairman', 'secretary', 'treasurer', 'vice_chairman','vice_secretary', 'vice_treasurer','members'];
