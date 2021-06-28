@@ -5,18 +5,18 @@ const router = Router();
 const pool = require("../db");
 const checkJWT = require('./authenticateAdmin');
 
-router.put("update/socBody/:id",checkJWT, async(request,response,next)=>{
-    const {id} = request.params;
+router.put("update/socBody/:soc_body_id",checkJWT, async(request,response,next)=>{
+    const {soc_body_id} = request.params;
     const keys = ['chairman', 'secretary', 'treasurer', 'vice_chairman','vice_secretary', 'vice_treasurer','members'];
     const fields = [];
     console.log(request.body[key]);
-    console.log(id);
+    console.log(soc_body_id);
     keys.forEach(key =>{
         if(request.body[key]) fields.push(key);
     });
     fields.forEach((field, index) =>{
         pool.query(`UPDATE public.soc_body SET ${field} = ($1) WHERE soc_body_id =($2)`,
-        [request.body[field], id], (err, res) =>{
+        [request.body[field], soc_body_id], (err, res) =>{
             if(err){
               res.status(500);
               return next(err);}
