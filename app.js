@@ -10,6 +10,7 @@ const userDetail = require("./routes/user");
 const auth = require("./routes/auth");
 const address = require("./routes/address");
 const society = require("./routes/society");
+const room = require("./routes/room");
 const app = express();
 app.use((err,req,res,next) =>{
         res.json(err);
@@ -22,6 +23,7 @@ app.use("/user", userDetail);
 app.use("/auth", auth);
 app.use('/address',address);
 app.use('/society',society);
+app.use('/room',room);
 // 
 app.listen(process.env.PORT || 3000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
