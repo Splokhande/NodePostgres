@@ -59,14 +59,12 @@ if(post !== "superadmin"){
               );
             }
 
-
             pool.query('INSERT INTO soc_body (soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)' ,
             [soc_id,null,null, null, null,null, null, null, null],(err, resp) =>{
               if(err) return next(err);
               console.log("Society Body created successfully");
-              // respo.json({"message":"Society Body created successfully"});
             });
-            console.log("New Society Added: ",res.rowCount);
+            console.log("New Society Body Added: ",res.rowCount);
             response.json({"message":"success","total_rooms":total_room, "total_shop":total_shop});
 
       });
