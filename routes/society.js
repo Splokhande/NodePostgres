@@ -118,4 +118,11 @@ router.put('/update/society/:id', async (request,response, next)=>{
 });
 
 
+router.get('/get/societyRoom/:id',(request, response,next)=>{
+  const id = request.params.id;
+  pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,true],(err,res)=>{
+      if(err) return next(err);
+      response.json(res.rows);
+  });
+});
 module.exports = router;
