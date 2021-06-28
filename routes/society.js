@@ -78,7 +78,7 @@ router.get('/get/society', async (request,response, next) =>{
           res.status(500);
           return next(err);
         }
-         response.statusCode(200).json({
+         response.status(200).json({
           "message":"Success",
            "data":res.rows
           });
