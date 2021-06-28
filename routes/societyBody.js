@@ -18,21 +18,17 @@ router.get('/get/socBody', async(request,response,next)=>{
 
 router.post("/create/socBody",async(request,response,next)=>{
     const {soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year} = request.body;
-
-
     pool.query('INSERT INTO soc_body (soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9) Returning *' ,
-    [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],(err, res) =>{
+    [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],
+    (err, res) =>{
       if(err) return next(err);
       console.log("Society Body created successfully");
-      // respo.json({"message":"Society Body created successfully"});
+      console.log("New Society Body Added: ",res.rowCount);
+        response.json({
+            "message":"success",
+            "data": res.rows
+        });
     });
-    console.log("New Society Body Added: ",res.rowCount);
-    response.json({
-        "message":"success",
-    // "total_rooms":total_room, "total_shop":total_shop
-        "data": res.rows
-});
-
 });
 
 router.put("/update/socBody/:soc_body_id", async(request,response,next)=>{
