@@ -88,7 +88,7 @@ router.get('/get/society/:id', async (request,response, next) =>{
 
   const id = request.params.id;
   console.log(id);
-   pool.query( `Select * from society where id = ${id}`, (err, res) =>{
+   pool.query( `Select * from society where soc_id = ${id}`, (err, res) =>{
         if(err){
           response.status(500);
           return next(err);
