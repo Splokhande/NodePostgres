@@ -5,7 +5,7 @@ const router = Router();
 const pool = require("../db");
 const checkJWT = require('./authenticateAdmin');
 
-router.put("update/socBody",checkJWT, async(request,response,next)=>{
+router.put("update/socBody/:id",checkJWT, async(request,response,next)=>{
     const {id} = request.params;
     const keys = ['chairman', 'secretary', 'treasurer', 'vice_chairman','vice_secretary', 'vice_treasurer','members'];
     const fields = [];
@@ -25,3 +25,5 @@ router.put("update/socBody",checkJWT, async(request,response,next)=>{
           });
         });
 });
+
+module.exports = router;
