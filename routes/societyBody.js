@@ -21,7 +21,7 @@ router.post("/create/socBody",async(request,response,next)=>{
 
 
     pool.query('INSERT INTO soc_body (soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9) Returning *' ,
-    [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],(err, resp) =>{
+    [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],(err, res) =>{
       if(err) return next(err);
       console.log("Society Body created successfully");
       // respo.json({"message":"Society Body created successfully"});
