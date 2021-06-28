@@ -22,11 +22,9 @@ router.post("/create/socBody",async(request,response,next)=>{
     [soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year],
     (err, res) =>{
       if(err) return next(err);
-      console.log("Society Body created successfully");
-      console.log("New Society Body Added: ",res.rowCount);
         response.json({
             "message":"success",
-            "data": res.rows
+            "data": res.rows,
         });
     });
 });
