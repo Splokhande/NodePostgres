@@ -15,14 +15,14 @@ router.put("update/socBody/:id",checkJWT, async(request,response,next)=>{
         if(request.body[key]) fields.push(key);
     });
     fields.forEach((field, index) =>{
-        pool.query(`UPDATE public.soc_body SET ${field} = ($1) WHERE soc_body_id =($2) Returning *`,
+        pool.query(`UPDATE public.soc_body SET ${field} = ($1) WHERE soc_body_id =($2)`,
         [request.body[field], id], (err, res) =>{
             if(err){
               res.status(500);
               return next(err);}
               response.status(200).json({
-                "message":"success",
-                 "data":res.rows
+                "message":"Updated Data Successfully",
+                //  "data":res.rows
                });
           });
         });
