@@ -1,0 +1,3 @@
+
+\\ Create functions seperately for USERROOM CRUD operations 
+modeule.export = {};
