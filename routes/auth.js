@@ -34,6 +34,8 @@ router.post('/login', async(request, response, next) => {
                 // console.log(data.rows);
                 pool.query("Select * from public.users WHERE id = $1",
                  [rows.rows[0].id], (err, res) =>{
+                   
+
                     if(err) return next(err);
                     if(res.rowCount === 0)
                     {

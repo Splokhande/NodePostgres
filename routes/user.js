@@ -15,16 +15,27 @@ const multer = Multer({
     }
   });
 router.get('/getUser', (request,response, next) =>{
-    pool.query("Select * from users", (err, res) =>{
+    pool.query("Select * from users ", (err, res) =>{
         if(err){res.status(500);
              return next(err);}
         response.json(res.rows);
       });
 });
 
+// SELECT u.*,ur.soc_id, ur.room_id, s.soc_id,s.soc_name,s.soc_reg_no,s.soc_address_id
+// FROM (SELECT id, UNNEST(user_room_id) as myroom
+//        FROM  users
+//       ) u inner join user_room as ur 
+//                   on ur.userroom_id = u.myroom 
+//       inner join society as s 
+//                   on ur.soc_id = s.soc_id
+//        inner join  
+      
+//  WHERE myroom IS NOT NULL;
+
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
-    pool.query("Select * from public.users WHERE id = $1", [id], (err, res) =>{
+    pool.query("Select u.* array_agg(ur.*)from public.users WHERE id = $1 ", [id], (err, res) =>{
         if(err){
             res.status(500);
             return next(err);}

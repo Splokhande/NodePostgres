@@ -3,6 +3,10 @@ const router = Router();
 const pool = require("../db");
 var dateFormat = require('dateformat');
 var day=dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+
+
+
+
 router.get('/get/userRoom/:roomId',(request, response,next)=>{
     const id = request.params.id;
     pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,true],(err,res)=>{
@@ -70,7 +74,6 @@ pool.query('update user_room set to_date = CURRENT_DATE where to_date is null AN
                 });
             });
         }
-       
     });
 });
 
