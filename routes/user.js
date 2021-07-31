@@ -35,9 +35,13 @@ router.get('/getUser', (request,response, next) =>{
 
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
-    pool.query("Select u.* array_agg(ur.*)from public.users WHERE id = $1 ", [id], (err, res) =>{
+    pool.query("SELECT u.*,(select json_agg(alb)from (select * from user_room where userroom_id = ur_id ) alb)\
+    FROM (SELECT id,  UNNEST(user_room_id) as ur_id \
+           FROM  users \
+          ) u \
+     WHERE ur_id IS NOT NULL; ", [id], (err, res) =>{
         if(err){
-            res.status(500);
+            
             return next(err);}
 
         if(res.rowCount === 0){

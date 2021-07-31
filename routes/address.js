@@ -229,18 +229,23 @@ pool.query('INSERT INTO wards (ward_no, mc_id , nagarsevak, country_id) VALUES (
 });
 
 router.get('/get/ward', (request,response, next) =>{
-  var ans ;
-  ans = pool.query("Select wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.state_id = state.state_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id", (err, res) =>{
-      if(err) return next(err);
-      return res.rows;
-
-    });
+  // pool.query("Select wards.ward_id, wards.ward_no,wards.nagarsevak ,city.city_id, city.city, mc_list.mc_id, mc_list.mc ,district.district_id,district.district, state.state_id, state.state, state.country_id, country.country from state INNER JOIN country on state.country_id = country.country_id inner join district on district.state_id = state.state_id INNER JOIN mc_list on mc_list.state_id = state.state_id inner join city on mc_list.mc_id = city.city_id inner join wards on wards.ward_id = mc_list.mc_id", (err, res) =>{
+  //     if(err) return next(err);
+  //     response.json({
+  //          "message":"success",
+  //           "data":res.rows});
+  //   });
+  pool.query(" select wards.ward_id, wards.ward_no,wards.nagarsevak,\
+   (select json_agg(alb)from (select * from mc_list where mc_id = wards.ward_id ) alb) \
+   as mc from wards where ward_id = 1", (err,res)=>{
 
     
-
+    if(err) return next(err);
     response.json({
       "message":"success",
-       "data":ans});
+      "data":res.rows
+    });
+  })
 
 });
 
