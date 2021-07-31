@@ -35,11 +35,10 @@ router.get('/getUser', (request,response, next) =>{
 
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
-    pool.query("SELECT u.*,(select json_agg(alb)from (select * from user_room where userroom_id = ur_id ) alb)\
-    FROM (SELECT id,  UNNEST(user_room_id) as ur_id \
-           FROM  users \
-          ) u \
-     WHERE ur_id IS NOT NULL; ", [id], (err, res) =>{
+    pool.query("SELECT u.*,(\
+        select json_agg(alb)from ( select * from user_room as ur inner join rooms as r on ur.room_id = r.room_id where ur.userroom_id = ur_id ) alb) as userroom\
+        FROM (SELECT id, UNNEST(user_room_id) as ur_id FROM users ) u \
+    WHERE ur_id IS NOT NULL;", [id], (err, res) =>{
         if(err){
             
             return next(err);}
