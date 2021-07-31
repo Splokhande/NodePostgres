@@ -36,13 +36,12 @@ router.get('/getUser', (request,response, next) =>{
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
     pool.query("SELECT u.*,(\
-        select json_agg(alb)from ( select ur.*, r.* AS room from user_room as ur\
-                                          inner join\
+        select json_agg(alb)from ( select ur.*, r.* AS room from user_room as ur \
+                                          inner join \
                                               rooms as r on r.room_id = ur.room_id \
                                   where ur.userroom_id = ur_id ) alb) as userroom\
-    --  	(select json_agg(alb)from ( select * from  ) alb) as room \
-        FROM (SELECT id, UNNEST(user_room_id) as ur_id FROM users where id = $1 ) u \
-    WHERE ur_id IS NOT NULL", [id], (err, res) =>{
+        FROM (SELECT id, UNNEST(user_room_id) as ur_id FROM users where id = $1) u \
+    WHERE ur_id IS NOT NULL;", [id], (err, res) =>{
         if(err){
             
             return next(err);}
