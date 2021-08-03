@@ -47,6 +47,8 @@ router.post('/login', async(request, response, next) => {
                   FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
               WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, res) =>{
                 
+                   
+
                     if(err) return next(err);
                     if(res.rowCount === 0)
                     {
