@@ -22,16 +22,26 @@ router.get('/getUser', (request,response, next) =>{
       });
 });
 
-// SELECT u.*,ur.soc_id, ur.room_id, s.soc_id,s.soc_name,s.soc_reg_no,s.soc_address_id
-// FROM (SELECT id, UNNEST(user_room_id) as myroom
-//        FROM  users
-//       ) u inner join user_room as ur 
-//                   on ur.userroom_id = u.myroom 
-//       inner join society as s 
-//                   on ur.soc_id = s.soc_id
-//        inner join  
-      
-//  WHERE myroom IS NOT NULL;
+
+// SELECT u.*,(
+//     select json_agg(userroom)
+// from ( 
+//         select *,
+//         (select json_agg(room) from ( select *,
+//                          (select json_agg(society)from ( select * ,
+//                                 (select json_agg(address) from ( select * 
+//                                                             from address as addr where s.soc_address_id = id ) address) as address 
+//                             from society as s where s.soc_id = ur.soc_id ) society) as society 
+//                          from rooms as r where r.room_id = ur.room_id ) room) as room 
+         
+            
+//             from user_room as ur where ur.userroom_id = ur_id 
+//     ) userroom
+// ) as userroom 
+
+//     FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = 24)  u 
+    
+// WHERE ur_id IS NOT NULL;
 
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
@@ -40,9 +50,9 @@ router.get('/getUser/:id', (request,response, next) =>{
 	from ( \
 			select *,\
 			(select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
-			 (select json_agg(society)from ( select * ,\
-											(select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
-											from society as s where s.soc_id = ur.soc_id ) society) as society \
+			    (select json_agg(society)from ( select * ,\
+                        (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
+                        from society as s where s.soc_id = ur.soc_id ) society) as society \
 				from user_room as ur where ur.userroom_id = ur_id \
 		) userroom\
 ) as userroom \
