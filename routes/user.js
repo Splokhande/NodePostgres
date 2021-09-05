@@ -1,9 +1,9 @@
 const {Router, request, response} = require("express");
 const router = Router();
-const handle = require("../functions/errorHandling");
 const pool = require("../db");
 const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
+const { ErrorHandler } = require("../functions/errorHandling");
 const uploadFile = require('../functions/uploadPhoto.js');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
@@ -23,40 +23,19 @@ router.get('/getUser', (request,response, next) =>{
       });
 });
 
-
-// SELECT u.*,(
-//     select json_agg(userroom)
-// from ( 
-//         select *,
-//         (select json_agg(room) from ( select *,
-//                          (select json_agg(society)from ( select * ,
-//                                 (select json_agg(address) from ( select * 
-//                                                             from address as addr where s.soc_address_id = id ) address) as address 
-//                             from society as s where s.soc_id = ur.soc_id ) society) as society 
-//                          from rooms as r where r.room_id = ur.room_id ) room) as room 
-         
-            
-//             from user_room as ur where ur.userroom_id = ur_id 
-//     ) userroom
-// ) as userroom 
-
-//     FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = 24)  u 
-    
-// WHERE ur_id IS NOT NULL;
-
 router.get('/getUser/:id', (request,response, next) =>{
     const {id} = request.params;
     pool.query("SELECT u.*,(\
         select json_agg(userroom)\
-	from ( \
-			select *,\
-			(select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
-			    (select json_agg(society)from ( select * ,\
-                        (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
-                        from society as s where s.soc_id = ur.soc_id ) society) as society \
-				from user_room as ur where ur.userroom_id = ur_id \
-		) userroom\
-) as userroom \
+        from ( \
+                select *,\
+                (select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
+                    (select json_agg(society)from ( select * ,\
+                            (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
+                            from society as s where s.soc_id = ur.soc_id ) society) as society \
+                    from user_room as ur where ur.userroom_id = ur_id \
+             ) userroom\
+          ) as userroom \
         FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
     WHERE ur_id IS NOT NULL;", [id], (err, res) =>{
         if(err){
@@ -100,10 +79,8 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at, user_room_id, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21) RETURNING *' ,
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
-            response.status(400).json(
-                handle.handle(err),
-            ); 
-            
+            console.log(err.message);
+            throw new ErrorHandler(404, err.message);
             // console.log(err);
             // console.log(err.message); 
             // return next(err);
