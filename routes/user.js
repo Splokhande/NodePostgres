@@ -78,10 +78,10 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
             console.log(err.message);
-            // throw new ErrorHandler(404, err.message);
+            throw new ErrorHandler(404, err.message);
             // console.log(err);
             // console.log(err.message);
-            return next(err);
+            // return next(err);
         }
         console.log("created User: ",res.rows[0]);
         response.status(200).json({"data":res.rows[0]});
