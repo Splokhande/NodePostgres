@@ -51,15 +51,21 @@ router.post('/login', async(request, response, next) => {
                   WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, resp) =>{
     
                         if(err) return  next(new ErrorHandler(400, err.message));
-                        // if(resp.rowCount === 0)
-                        // {
-                        //     response.json({"message":"No Rooms found"});
-                        // }
-                        // else
-                        // {
+                        if(resp.rowCount === 0)
+                        {
+                            response.json({
+                                "message":"No Rooms found",
+                                "result":resp.rows
+                            });
+                        }
+                        else
+                        {
                             console.log("token generated and login successful");
-                            response.status(200).json({"result":resp.rows});
-                    // }
+                            response.status(200).json({
+                                "message":resp.rowCount+" Rooms found",
+                                "result":resp.rows
+                            });
+                    }
                   });
                 });
         }else{
