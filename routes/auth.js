@@ -53,7 +53,7 @@ router.post('/login', async(request, response, next) => {
                         if(err) return  next(new ErrorHandler(400, err.message));
                         if(resp.rowCount === 0)
                         {
-                            response.json({"message":"No User Found"});
+                            response.json({"message":"No Rooms found"});
                         }
                         else
                         {
