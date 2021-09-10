@@ -78,7 +78,7 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
             console.log(err.message);
-            return  next(ErrorHandler(404, err.message));
+            return  next(new ErrorHandler(404, err.message));
             // console.log(err);
             // console.log(err.message);
             // return next(err);
