@@ -3,7 +3,7 @@ const router = Router();
 const pool = require("../db");
 const saltRounds = require('../db_config/config');
 var bcrypt = require('bcrypt');
-const { ErrorHandler } = require("../functions/errorHandling");
+const { ErrorHandler,handleError } = require("../functions/errorHandling");
 const uploadFile = require('../functions/uploadPhoto.js');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
@@ -78,7 +78,7 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
             console.log(err.message);
-            throw new ErrorHandler(404, err.message);
+            throw new handleError(404, err.message);
             // console.log(err);
             // console.log(err.message);
             // return next(err);
