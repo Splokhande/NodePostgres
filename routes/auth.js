@@ -23,6 +23,8 @@ router.post('/login', async(request, response, next) => {
         if(err) return  next(new ErrorHandler(400, err.message));
         // Generate an access token
         console.log(rows.rows.length);
+        console.log(typeof rows.rows.length );
+        console.log(rows.rowCount > 0);
         // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
         // console.log(validPassword);
         if(rows.rowCount > 0)
