@@ -27,7 +27,7 @@ router.post('/login', async(request, response, next) => {
         console.log(rows.rowCount > 0);
         // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
         // console.log(validPassword);
-        if(rows.rowCount !== 0)
+        if(Array.isArray(rows.rows) && rows.rows.length)
       {
         if(rows.rows[0].password === password){
             const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
