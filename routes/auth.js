@@ -22,6 +22,7 @@ router.post('/login', async(request, response, next) => {
     .then(async(rows,err) =>{
         if(err) return  next(new ErrorHandler(400, err.message));
         // Generate an access token
+        let user = rows.rows[0];
         console.log(rows.rows.length);
         console.log(typeof rows.rows.length );
         console.log(rows.rowCount > 0);
@@ -54,6 +55,7 @@ router.post('/login', async(request, response, next) => {
                         if(resp.rowCount === 0)
                         {
                             response.json({
+                                "user":user,
                                 "message":"No Rooms found",
                                 "result":resp.rows
                             });
@@ -62,6 +64,7 @@ router.post('/login', async(request, response, next) => {
                         {
                             console.log("token generated and login successful");
                             response.status(200).json({
+                                "user":user,
                                 "message":resp.rowCount+" Rooms found",
                                 "result":resp.rows
                             });
