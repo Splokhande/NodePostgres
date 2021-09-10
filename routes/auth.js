@@ -46,17 +46,17 @@ router.post('/login', async(request, response, next) => {
                   ) userroom\
               ) as userroom \
                       FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
-                  WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, res) =>{
+                  WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, resp) =>{
     
                         if(err) return  next(new ErrorHandler(400, err.message));
-                        if(res.rowCount === 0)
+                        if(resp.rowCount === 0)
                         {
-                            res.json({"message":"No User Found"});
+                            response.json({"message":"No User Found"});
                         }
                         else
                         {
                             console.log("token generated and login successful");
-                            response.status(200).json(res.rows);
+                            response.status(200).json(resp.rows);
                     }
                   });
                 });
