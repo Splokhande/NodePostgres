@@ -18,12 +18,12 @@ router.post('/login', async(request, response, next) => {
     console.log(request.body,mobile_no, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
-    await pool.query(`Select * from public.users WHERE mobile_no=$1 `,[mobile_no])
+    await pool.query(`Select * from public.users WHERE mobile_no=$1 And password = $2`,[mobile_no,password])
     .then(async(rows,err) =>{
         if(err) return  next(new ErrorHandler(400, err.message));
         // Generate an access token
         console.log(rows.rows[0]);
-        const validPassword = await bcrypt.compare(password, rows.rows[0].password);
+        // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
         console.log(validPassword);
         if(validPassword)
       {
