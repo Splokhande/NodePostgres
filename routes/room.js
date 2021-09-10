@@ -5,7 +5,7 @@ const pool = require("../db");
 router.get('/get/blocked_room/:id',(request, response,next)=>{
     const id = request.params.id;
     pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,false],(err,res)=>{
-        if(err) return next(err);
+        if(err) return  next(new ErrorHandler(400, err.message));
         response.json(res.rows);
     });
 });
@@ -21,7 +21,7 @@ router.put("/update/room/:id", (request, response, next) =>{
     fields.forEach((field, index) =>{
         pool.query(`UPDATE rooms SET ${field} = ($1) WHERE room_id =($2)`,
         [request.body[field], id], (err, res) =>{
-            if(err) return next(err);
+            if(err) return  next(new ErrorHandler(400, err.message));
               if(index === fields.length - 1)
               response.redirect('/user/getUser');
           });

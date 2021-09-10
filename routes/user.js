@@ -18,7 +18,7 @@ const multer = Multer({
 router.get('/getUser', (request,response, next) =>{
     pool.query("Select * from users ", (err, res) =>{
         if(err){res.status(500);
-             return next(err);}
+             return  next(new ErrorHandler(400, err.message));}
         response.json(res.rows);
       });
 });
@@ -40,7 +40,7 @@ router.get('/getUser/:id', (request,response, next) =>{
     WHERE ur_id IS NOT NULL;", [id], (err, res) =>{
         if(err){
             
-            return next(err);}
+            return  next(new ErrorHandler(400, err.message));}
 
         if(res.rowCount === 0){
             response.status(400).json({error:"No User Found"});
@@ -54,7 +54,7 @@ router.get('/getUser/:id', (request,response, next) =>{
 router.get('/getUserRoom/:id', (request,response, next) =>{
     const {id} = request.params;
     pool.query("Select users from users WHERE id = $1", [id], (err, res) =>{
-        if(err) return next(err);
+        if(err) return  next(new ErrorHandler(400, err.message));
 
         if(res.rowCount === 0){
             response.status(400).json({error:"No User Found"});
@@ -78,10 +78,10 @@ router.get('/getUserRoom/:id', (request,response, next) =>{
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, passwordHash, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
             console.log(err.message);
-            return  next(new ErrorHandler(404, err.message));
+            return  next(new ErrorHandler(400, err.message));
             // console.log(err);
             // console.log(err.message);
-            // return next(err);
+            // return  next(new ErrorHandler(400, err.message));
         }
         console.log("created User: ",res.rows[0]);
         response.status(200).json({"data":res.rows[0]});
@@ -108,7 +108,7 @@ router.put('/:id', (request,response, next) =>{
 
     pool.query(`UPDATE public.users SET updated_at = ($1) WHERE id =($2) Returning *`,
         [currentTimeInMilliseconds, id], (err, res) =>{
-            if(err) return next(err);
+            if(err) return  next(new ErrorHandler(400, err.message));
 
           });
     fields.forEach((field, index) =>{
@@ -117,7 +117,7 @@ router.put('/:id', (request,response, next) =>{
         // }
         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
         [request.body[field], id], (err, res) =>{
-            if(err) return next(err);
+            if(err) return  next(new ErrorHandler(400, err.message));
               if(index === fields.length - 1)
               response.status(200).json({"data":res.rows[0]});
           });
@@ -131,7 +131,7 @@ router.put('/:id', (request,response, next) =>{
    
         pool.query(`UPDATE public.users SET password = ($1) WHERE id =($2) Returning *`,
         [passwordHash, id], (err, res) =>{
-            if(err) return next(err);
+            if(err) return  next(new ErrorHandler(400, err.message));
               response.status(200).json({"message":"success"});
           });
         });
@@ -158,7 +158,7 @@ router.put('/:id', (request,response, next) =>{
 
         pool.query(`DELETE FROM public.users WHERE id =($1)`,[id],
         (err, res)=>{
-            if(err) return next(err);
+            if(err) return  next(new ErrorHandler(400, err.message));
             response.redirect('/user_detail/user_detail');
         });
  });

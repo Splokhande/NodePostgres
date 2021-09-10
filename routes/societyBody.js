@@ -9,7 +9,7 @@ const checkJWT = require('./authenticateAdmin');
 router.get('/get/socBody', async(request,response,next)=>{
     pool.query('Select * from soc_body',(err,res)=>{
         if(err){res.status(500);
-            return next(err);}
+            return  next(new ErrorHandler(400, err.message));}
        response.status(200).json({
         "message":"success",
         "data":res.rows});
@@ -49,7 +49,7 @@ router.put("/update/socBody/:soc_body_id", async(request,response,next)=>{
         [request.body[field], soc_body_id], (err, res) =>{
             if(err){
               res.status(500);
-              return next(err);}
+              return  next(new ErrorHandler(400, err.message));}
               response.status(200).json({
                 "message":"Updated Data Successfully",
                 //  "data":res.rows

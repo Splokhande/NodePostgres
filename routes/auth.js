@@ -20,7 +20,7 @@ router.post('/login', async(request, response, next) => {
     // const user = users.find(u => { return u.username === username && u.password === password });
     await pool.query(`Select * from public.users WHERE email=$1 `,[email])
     .then(async(rows,err) =>{
-        if(err) return next(err);
+        if(err) return  next(new ErrorHandler(400, err.message));
         // Generate an access token
         // console.log(rows.rows[0].id);
         const validPassword = await bcrypt.compare(password, rows.rows[0].password);
@@ -49,7 +49,7 @@ router.post('/login', async(request, response, next) => {
                 
                    
 
-                    if(err) return next(err);
+                    if(err) return  next(new ErrorHandler(400, err.message));
                     if(res.rowCount === 0)
                     {
                         res.json({"message":"No User Found"});

@@ -54,7 +54,7 @@ module.exports = class User{
 
 // User.getAll = result =>{
 //     pool.query("Select * from users ", (err, res) =>{
-//         if(err) return next(err);
+//         if(err) return  next(new ErrorHandler(400, err.message));
 //         console.log(res.rows);
 //         res.json(res.rows);
 //       });
@@ -64,7 +64,7 @@ module.exports = class User{
 // User.getById = (id, result) =>{
 //     const {id} = request.params;
 //     pool.query("Select * from users WHERE id = $1", [id], (err, res) =>{
-//         if(err) return next(err);
+//         if(err) return  next(new ErrorHandler(400, err.message));
 //         if(res.rowCount === 0){
 //             response.json({"message":"No User Found"});
 //         }
@@ -93,7 +93,7 @@ module.exports = class User{
 //     // }
 //     // ,[fname, lname, dob, gender, age, mobileNo, status, email, blockCount,
 //     // mobileModel, isLoggedIn, active, deviceId], (err, res) =>{
-//     //     if(err) return next(err);
+//     //     if(err) return  next(new ErrorHandler(400, err.message));
 
 //     //     response.redirect('/user_detail/user_detail');
 
@@ -114,7 +114,7 @@ module.exports = class User{
 //     fields.forEach((field, index) =>{
 //         pool.query(`UPDATE public.users SET ${field} = ($1) WHERE id =($2)`,
 //         [request.body[field], id], (err, res) =>{
-//             if(err) return next(err);
+//             if(err) return  next(new ErrorHandler(400, err.message));
 //               if(index === fields.length - 1) 
 //                response.redirect('/user_detail/user_detail');
 //           });
@@ -126,7 +126,7 @@ module.exports = class User{
 
 //         pool.query(`DELETE FROM public.user_detail WHERE id =($1)`,[id],
 //         (err, res)=>{
-//             if(err) return next(err);
+//             if(err) return  next(new ErrorHandler(400, err.message));
 //             res.redirect('/user_detail/user_detail');
 //         });
 

@@ -25,7 +25,7 @@ if(post !== "superadmin"){
     (err, res) =>{
       if(err){
         res.status(500);
-        return next(err);}
+        return  next(new ErrorHandler(400, err.message));}
       const blocks = total_block;
       const floors =total_floor;
       const rooms = rooms_each_floor;
@@ -38,7 +38,7 @@ if(post !== "superadmin"){
                       arr.push(`${String.fromCharCode(65+i)}-${j}0${k+1}`);
                       pool.query('INSERT INTO rooms (soc_id, room_no,owner, on_rent, on_sale, carpet_area, room_structure, balcony, is_occupied, total_members, room_exists) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11)' ,
                       [soc_id,room_no,null,false,false,null,null,false,false,0,true],(err, resp) =>{
-                        if(err) return next(err);
+                        if(err) return  next(new ErrorHandler(400, err.message));
                         console.log(`Room no ${String.fromCharCode(65+i)}-${j}0${k+1} added`);
                         // resp.json({"message":"success"});
                       }
@@ -52,7 +52,7 @@ if(post !== "superadmin"){
                 arr.push(`${String.fromCharCode(65+i)}-${j}0${k+1}`);
                 pool.query('INSERT INTO shop (soc_id, shop_no, shop_type, reg_no, shop_owner_id, rental_id, on_rent, on_sale, shop_area, is_occupied) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10)' ,
                 [soc_id,shop_no,null,null,null,null,false,false,0,false],(err, resp) =>{
-                  if(err) return next(err);
+                  if(err) return  next(new ErrorHandler(400, err.message));
                   // console.log(`Room no ${String.fromCharCode(65+i)}-${j}0${k+1} added`);
                   // resp.json({"message":"success"});
                 }
@@ -61,7 +61,7 @@ if(post !== "superadmin"){
 
             pool.query('INSERT INTO soc_body (soc_id, chairman, secretary, treasurer, vice_chairman, vice_secretary, vice_treasurer,members,year ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9)' ,
             [soc_id,null,null, null, null,null, null, null, null],(err, resp) =>{
-              if(err) return next(err);
+              if(err) return  next(new ErrorHandler(400, err.message));
               console.log("Society Body created successfully");
             });
             console.log("New Society Body Added: ",res.rowCount);
@@ -74,7 +74,7 @@ router.get('/get/society', async (request,response, next) =>{
    pool.query("Select * from society", (err, res) =>{
         if(err){
           res.status(500);
-          return next(err);
+          return  next(new ErrorHandler(400, err.message));
         }
          response.status(200).json({
           "message":"Success",
@@ -89,7 +89,7 @@ router.get('/get/society/:id', async (request,response, next) =>{
    pool.query( `Select * from society where soc_id = ${id}`, (err, res) =>{
         if(err){
           response.status(500);
-          return next(err);
+          return  next(new ErrorHandler(400, err.message));
         }
          response.json(res.rows);
       });
@@ -108,7 +108,7 @@ router.put('/update/society/:id', async (request,response, next)=>{
         [request.body[field], id], (err, res) =>{
             if(err){
               res.status(500);
-              return next(err);}
+              return  next(new ErrorHandler(400, err.message));}
               if(index === fields.length - 1)
               response.redirect('/user/getUser');
           });
@@ -119,7 +119,7 @@ router.put('/update/society/:id', async (request,response, next)=>{
 router.get('/get/societyRoom/:id',(request, response,next)=>{
   const id = request.params.id;
   pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,true],(err,res)=>{
-      if(err) return next(err);
+      if(err) return  next(new ErrorHandler(400, err.message));
       response.json(res.rows);
   });
 });
