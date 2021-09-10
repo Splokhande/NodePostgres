@@ -14,11 +14,11 @@ router.post('/login', async(request, response, next) => {
   
 
     // Read username and password from request body
-    const { email, password,device_id, mobile_model } = request.body;
-    console.log(request.body,email, password);
+    const { mobile_no, password,device_id, mobile_model } = request.body;
+    console.log(request.body,mobile_no, password);
     // Filter user from the users array by username and password
     // const user = users.find(u => { return u.username === username && u.password === password });
-    await pool.query(`Select * from public.users WHERE email=$1 `,[email])
+    await pool.query(`Select * from public.users WHERE mobile_no=$1 `,[mobile_no])
     .then(async(rows,err) =>{
         if(err) return  next(new ErrorHandler(400, err.message));
         // Generate an access token
@@ -46,8 +46,6 @@ router.post('/login', async(request, response, next) => {
           ) as userroom \
                   FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
               WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, res) =>{
-                
-                   
 
                     if(err) return  next(new ErrorHandler(400, err.message));
                     if(res.rowCount === 0)
