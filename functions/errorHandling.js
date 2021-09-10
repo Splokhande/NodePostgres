@@ -3,9 +3,9 @@
 class ErrorHandler extends Error {
     constructor(statusCode, message) {
       let msg = message;
-      if(str.includes('duplicate key value violates unique constraint \"unique_mobile_no\"')){
-        msg = "This phone number is already registered."
-      }
+      // if(str.includes('duplicate key value violates unique constraint \"unique_mobile_no\"')){
+      //   msg = "This phone number is already registered.";
+      // }
       super();
       this.statusCode = statusCode;
       this.message = msg;
