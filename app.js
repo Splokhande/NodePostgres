@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {Pool} = require('pg');
-const jwt = require('helpers/jwt');
+const jwt = require('./helpers/jwt');
 const {user, host, database, password, port}= require('./db_config/config.js');
 const pool = new Pool({user, host, database, password, port});
 // const pool = require("./db");
