@@ -29,13 +29,15 @@ app.use('/room',room);
 app.use('/societyBody',societyBody);
 
 app.use((err, req, res, next) => {
+
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token...');
+}
     handleError(err, res);
   });
-  
+
   app.use(function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).send('invalid token...');
-    }
+    
 });
 
 // 
