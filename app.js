@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {Pool} = require('pg');
-const jwt = require('jsonwebtoken');
-
+const jwt = require('helpers/jwt');
 const {user, host, database, password, port}= require('./db_config/config.js');
 const pool = new Pool({user, host, database, password, port});
 // const pool = require("./db");
@@ -27,6 +26,7 @@ app.use('/address',address);
 app.use('/society',society);
 app.use('/room',room);
 app.use('/societyBody',societyBody);
+app.use(jwt());
 app.use((err, req, res, next) => {
     handleError(err, res);
   });
