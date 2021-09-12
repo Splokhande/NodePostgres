@@ -1,10 +1,10 @@
 const expressJwt = require('express-jwt');
-const {secret} =  require('../db_config/config');
+const config =  require('../db_config/config');
 
 module.exports = jwt;
 
 function jwt() {
-    // const  secret  = config;
+    const  secret  = config.secret;
     return expressJwt({ secret, algorithms: ['HS256'] }).unless({
         path: [
             // public routes that don't require authentication
