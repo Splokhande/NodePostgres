@@ -29,12 +29,7 @@ app.use('/room',room);
 app.use('/societyBody',societyBody);
 
 app.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-      err = {
-        statusCode:400,
-        message:"Invalid token"
-      }
-  }
+   
     handleError(err, res);
   });
 
