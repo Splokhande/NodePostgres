@@ -31,6 +31,13 @@ app.use('/societyBody',societyBody);
 app.use((err, req, res, next) => {
     handleError(err, res);
   });
+  
+  app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).send('invalid token...');
+    }
+});
+
 // 
 app.listen(process.env.PORT || 3000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
