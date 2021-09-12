@@ -28,7 +28,7 @@ class ErrorHandler extends Error {
         // if(str.includes('duplicate key value violates unique constraint \"unique_mobile_no\"')){
         //   msg = "This phone number is already registered.";
         // }
-        super();
+        // super();
         this.statusCode = statusCode;
         // this.message = msg;
         this.result = result;
