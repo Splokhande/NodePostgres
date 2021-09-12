@@ -13,9 +13,10 @@ const room = require("./routes/room");
 const societyBody = require("./routes/societyBody");
 const app = express();
 const { handleError } = require("./functions/errorHandling");
-app.use((err,req,res,next) =>{
-        res.json(err);
-    });
+
+app.use(jwt());
+app.use((err,req,res,next) =>{res.json(err);});
+    
 app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
@@ -26,7 +27,7 @@ app.use('/address',address);
 app.use('/society',society);
 app.use('/room',room);
 app.use('/societyBody',societyBody);
-app.use(jwt());
+
 app.use((err, req, res, next) => {
     handleError(err, res);
   });
