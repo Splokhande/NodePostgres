@@ -13,20 +13,20 @@ const room = require("./routes/room");
 const societyBody = require("./routes/societyBody");
 const app = express();
 const { handleError } = require("./functions/errorHandling");
-
-app.use(jwt());
+const checkAuth = require('./routes/authenticateUser');
+// app.use(jwt());
 app.use((err,req,res,next) =>{res.json(err);});
     
 app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
 app.use(bodyParser.json());
-app.use("/user", userDetail);
+app.use("/user",checkAuth, userDetail);
 app.use("/auth", auth);
 app.use('/address',address);
-app.use('/society',society);
-app.use('/room',room);
-app.use('/societyBody',societyBody);
+app.use('/society',checkAuth,society);
+app.use('/room',checkAuth,room);
+app.use('/societyBody',checkAuth,societyBody);
 
 app.use((err, req, res, next) => {
    

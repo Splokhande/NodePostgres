@@ -33,7 +33,8 @@ const authenticateAdmin = (req, res, next) => {
         // });
     } 
     else {
-        res.json({"message": "Unauthorized User"});;
+        res.status(400).json({
+            "message": "Unauthorized User"});;
        
     }
 };
