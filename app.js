@@ -19,6 +19,11 @@ app.use((err,req,res,next) =>{res.json(err);});
 app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
+
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
+
 app.use(bodyParser.json());
 app.use("/user",checkAuth, userDetail);
 app.use("/auth", auth);
@@ -27,9 +32,6 @@ app.use('/society',checkAuth,society);
 app.use('/room',checkAuth,room);
 app.use('/societyBody',checkAuth,societyBody);
 
-app.use((err, req, res, next) => {
-    handleError(err, res);
-  });
 
 //
 app.listen(process.env.PORT || 3000, function(){
