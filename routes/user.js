@@ -7,7 +7,7 @@ const { ErrorHandler,handleError } = require("../functions/errorHandling");
 const uploadFile = require('../functions/uploadPhoto.js');
 const checkAuth = require('../routes/authenticateUser');
 const checkAdmin = require('../routes/authenticateAdmin');
-var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});;
+var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
 const Multer = require('multer');
 const multer = Multer({
     storage: Multer.memoryStorage(),

@@ -9,6 +9,7 @@ var User = require('../routes/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
+var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
 router.post('/login', async(request, response, next) => {
 
   
