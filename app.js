@@ -16,7 +16,6 @@ const { handleError } = require("./functions/errorHandling");
 const checkAuth = require('./routes/authenticateUser');
 // app.use(jwt());
 app.use((err,req,res,next) =>{res.json(err);});
-    
 app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
@@ -29,11 +28,10 @@ app.use('/room',checkAuth,room);
 app.use('/societyBody',checkAuth,societyBody);
 
 app.use((err, req, res, next) => {
-   
     handleError(err, res);
   });
 
-// 
+//
 app.listen(process.env.PORT || 3000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
   });
