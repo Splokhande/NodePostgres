@@ -20,9 +20,6 @@ app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
 
-app.use((err, req, res, next) => {
-  handleError(err, res);
-});
 
 app.use(bodyParser.json());
 app.use("/user",checkAuth, userDetail);
@@ -31,6 +28,9 @@ app.use('/address',address);
 app.use('/society',checkAuth,society);
 app.use('/room',checkAuth,room);
 app.use('/societyBody',checkAuth,societyBody);
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
 
 
 //
