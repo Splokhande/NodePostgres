@@ -1,7 +1,7 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-const { ErrorHandler, handleError } = require("../functions/errorHandling");
+const { ErrorHandler, handleError, ResponseHandler } = require("../functions/errorHandling");
 const saltRounds = require("../db_config/config");
 var bcrypt = require("bcrypt");
 var bodyParser = require('body-parser');
@@ -11,6 +11,7 @@ var User = require('../routes/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
+const { success, error, validation } = require("../functions/response");
 var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
 router.post('/login', async(request, response, next) => {
 
@@ -29,17 +30,16 @@ router.post('/login', async(request, response, next) => {
         console.log(rows.rows.length);
         console.log(typeof rows.rows.length );
         console.log(rows.rowCount > 0);
-        // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
-        // console.log(validPassword);
+        const validPassword = await bcrypt.compare(password, rows.rows[0].password);
+        console.log(validPassword);
         if(Array.isArray(rows.rows) && rows.rows.length)
       {
-        if(rows.rows[0].password === password){
+        if(rows.rows[0].password === validPassword){
             const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
             // console.log(rows.rows[0].id, accessToken);
                 pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
                 [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
                     // console.log(data.rows);
-    
                     pool.query("SELECT u.*,(\
                       select json_agg(userroom)\
                 from ( \
@@ -57,20 +57,23 @@ router.post('/login', async(request, response, next) => {
                         if(err) return  next(new ErrorHandler(400, err.message));
                         if(resp.rowCount === 0)
                         {
-                            response.json({
-                                "user":user,
-                                "message":"No Rooms found",
-                                "result":resp.rows
-                            });
+                            response.json(
+                                success(
+                                "OK",
+                                {data : resp.rows},
+                                resp.statusCode
+                            ));
                         }
                         else
                         {
                             console.log("token generated and login successful");
-                            response.status(200).json({
-                                "user":user,
-                                "message":resp.rowCount+" Rooms found",
-                                "result":resp.rows
-                            });
+                            response.status(200).json(
+                                success(
+                                    resp.rowCount+" Rooms found",
+                                    {data : resp.rows},
+                                    resp.statusCode
+                                )
+                                );
                     }
                   });
                 });
@@ -97,7 +100,7 @@ router.post('/newUser', async (request,response, next) =>{
     // const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
     // console.log(passwordHash);
 
-    try {
+    // try {
     pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at, user_room_id, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21) RETURNING *' ,
     [fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
@@ -107,18 +110,22 @@ router.post('/newUser', async (request,response, next) =>{
             // console.log(err.message);
             // return  next(new ErrorHandler(400, err.message));
         }
-        console.log("created User: ",res.rows[0]);
-        response.status(200).json({"data":res.rows[0]});
+        return response.sendStatus(200).json(
+                success(
+                "User Created successfully",
+                {data : res.rows[0]},
+                res.statusCode
+            ));
     });
 
-    } catch (error) {
-        // console.log(error.message);
-        // return response.status(404).json({
-        //     "message":error.message,
-        // });
-        console.log(err.message);
-        throw (new ErrorHandler(400, err.message));
-    }
+    // } catch (error) {
+    //     // console.log(error.message);
+    //     // return response.status(404).json({
+    //     //     "message":error.message,
+    //     // });
+    //     console.log(err.message);
+    //     throw (new ErrorHandler(400, err.message));
+    // }
 });
 
 module.exports = router;

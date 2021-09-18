@@ -12,22 +12,28 @@ const society = require("./routes/society");
 const room = require("./routes/room");
 const societyBody = require("./routes/societyBody");
 const app = express();
-const { handleError } = require("./functions/errorHandling");
+const { handleError,handleResponse } = require("./functions/errorHandling");
 const checkAuth = require('./routes/authenticateUser');
 // app.use(jwt());
-app.use((err,req,res,next) =>{res.json(err);});
+// app.use((err,req,res,next) =>{
+//   res.json(err);});
+// app.use((req, res) => {
+//   handleResponse(res);
+// });
+
 app.get("/",(req,res)=>{
     res.send("Hello World"); 
 });
 
 
 app.use(bodyParser.json());
-app.use("/user",checkAuth, userDetail);
+app.use("/user", userDetail);
 app.use("/auth", auth);
 app.use('/address',address);
 app.use('/society',checkAuth,society);
 app.use('/room',checkAuth,room);
 app.use('/societyBody',checkAuth,societyBody);
+
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
