@@ -24,7 +24,12 @@ router.get("/getUser", (request, response, next) => {
       res.status(500);
       return next(new ErrorHandler(400, err.message));
     }
-    response.json(res.rows);
+    response.json(success(
+      "All users retrieved successfully",
+      res.rows,
+      200,
+     
+    ));
   });
 });
 
@@ -54,14 +59,14 @@ router.get("/getUser/:id", (request, response, next) => {
 
         if (res.rowCount === 0) {
           response.status(200).json(
-            success(
+           
               "success",
               {
                 user: resp.rows[0],
                 userRoom: [],
               },
               200
-            )
+           
           );
         } else {
           response.status(200).json(
