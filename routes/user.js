@@ -194,15 +194,15 @@ router.delete("/:id", (request, response, next) => {
 });
 
 router.get("/userExist/:phoneNumber", (request, response, next) => {
-  const phoneNumber = request.params;
+  const phoneNumber = request.params.phoneNumber;
   console.log("Phone number " + phoneNumber);
   pool.query(
-    "Select * from users where mobile_no= $1",
+    " Select COUNT(*) from users where mobile_no= $1",
     [phoneNumber],
     (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
       response.json({
-        count: res.rowCount,
+        count: res.rows,
       });
     }
   );
