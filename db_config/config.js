@@ -1,14 +1,14 @@
 
 ///Local config
-module.exports = {
-  host: "localhost",
-  user: "postgres",
-  password: "Sail8474",
-  database: "thj_local",
-  port: 5432,
-  secret: 'naksld1j5ais2hia8sdm5nakldn56aitiwgtiw7jjgjndsghaahbfjkabfafnfajfjjaa84siufd549dlk',
-  salt:3,
-};
+// module.exports = {
+//   host: "localhost",
+//   user: "postgres",
+//   password: "Sail8474",
+//   database: "thj_local",
+//   port: 5432,
+//   secret: 'naksld1j5ais2hia8sdm5nakldn56aitiwgtiw7jjgjndsghaahbfjkabfafnfajfjjaa84siufd549dlk',
+//   salt:3,
+// };
 /// Server Config
 module.exports = {
   host: "ec2-54-235-108-217.compute-1.amazonaws.com",

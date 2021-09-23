@@ -110,10 +110,10 @@ router.post('/newUser', async (request,response, next) =>{
             // console.log(err.message);
             // return  next(new ErrorHandler(400, err.message));
         }
-        return response.sendStatus(200).json(
+        return response.json(
                 success(
                 "User Created successfully",
-                {data : res.rows[0]},
+                res.rows[0],
                 res.statusCode
             ));
     });
