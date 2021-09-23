@@ -202,7 +202,7 @@ router.get("/userExist/:phoneNumber", (request, response, next) => {
     (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
       response.json({
-        count: res.rows,
+        count: res.rows[0],
       });
     }
   );
