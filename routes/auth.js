@@ -71,7 +71,9 @@ router.post('/login', async(request, response, next) => {
                             response.status(200).json(
                                 success(
                                     resp.rowCount+" Rooms found",
-                                    {data : resp.rows},
+                                    {data : {
+                                        "user":rows.rows[0],
+                                        "room":resp.rows}},
                                     resp.statusCode
                                 )
                                 );
