@@ -30,11 +30,12 @@ router.post('/login', async(request, response, next) => {
         console.log(rows.rows.length);
         console.log(typeof rows.rows.length );
         console.log(rows.rowCount > 0);
-        const validPassword = await bcrypt.compare(password, rows.rows[0].password);
-        console.log(validPassword);
+        // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
+        // console.log(validPassword);
         if(Array.isArray(rows.rows) && rows.rows.length)
       {
-        if(rows.rows[0].password === validPassword){
+        // if(rows.rows[0].password === validPassword){
+        if(rows.rows[0].password === password){
             const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
             // console.log(rows.rows[0].id, accessToken);
                 pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
