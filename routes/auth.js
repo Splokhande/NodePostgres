@@ -61,7 +61,9 @@ router.post('/login', async(request, response, next) => {
                             response.json(
                                 success(
                                 "OK",
-                                {data : resp.rows},
+                                {
+                                    "user":rows.rows[0],
+                                    "room":resp.rows},
                                 resp.statusCode
                             ));
                         }
