@@ -209,7 +209,7 @@ router.get("/userExist/:phoneNumber", (request, response, next) => {
 });
 
 router.put("/updateUser/:id", async (request, response, next) => {
-  print(request.params);
+
   const { id } = request.params;
   const {
     fname,
@@ -287,7 +287,6 @@ router.put("/updateUser/:id", async (request, response, next) => {
       }
       console.log("Success");
       return response
-        .status(200)
         .json(
           // response.json(new ResponseHandler(200, err.message,res.rows[0]))
         //  new ResponseHandler(200, err.message,res.rows[0])
