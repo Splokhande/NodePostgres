@@ -209,7 +209,7 @@ router.get("/userExist/:phoneNumber", (request, response, next) => {
 });
 
 router.put("/updateUser/:id", async (request, response, next) => {
- 
+  print(request.params);
   const { id } = request.params;
   const {
     fname,
