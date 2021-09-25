@@ -288,11 +288,7 @@ router.put("/updateUser/:id", async (request, response, next) => {
       console.log("Success");
       return response
         .json(
-          // response.json(new ResponseHandler(200, err.message,res.rows[0]))
-        //  new ResponseHandler(200, err.message,res.rows[0])
-          
             success("Updated Successfully", res.rows[0],200)
-           
         );
     }
   );
