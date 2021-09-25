@@ -254,7 +254,7 @@ router.put("/updateUser/:id", async (request, response, next) => {
   password = COALESCE(NULLIF($15, ''), password),\
   status = COALESCE(NULLIF($16, ''), status),\
   photo = COALESCE(NULLIF($17, ''), photo),\
-  updated_at = $18 where id = $19",
+  updated_at = $18 where id = $19 Returning *" ,
     [
       fname,
       lname,
@@ -291,7 +291,7 @@ router.put("/updateUser/:id", async (request, response, next) => {
           // response.json(new ResponseHandler(200, err.message,res.rows[0]))
         //  new ResponseHandler(200, err.message,res.rows[0])
           
-            success("Updated Successfully",200, res.rows[0])
+            success("Updated Successfully", res.rows[0],200)
            
         );
     }
