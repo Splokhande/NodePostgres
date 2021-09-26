@@ -106,7 +106,7 @@ router.post('/newUser', async (request,response, next) =>{
 
     // try {
     pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at, user_room_id, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21) RETURNING *' ,
-    ['', '', '', '', "user", '', '', mobile_no, token, age, '', mobile_model, auth_token , true, password, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
+    ['', '', '', '', "user", '', '', mobile_no, token, age, 0, mobile_model, auth_token , true, password, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
          if(err){
             console.log(err.message);
             return next(new ErrorHandler(400, err.message));
