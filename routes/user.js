@@ -98,66 +98,66 @@ router.get("/getUserRoom/:id", (request, response, next) => {
   });
 });
 
-router.put("/:id", (request, response, next) => {
-  const { id } = request.params;
+// router.put("/:id", (request, response, next) => {
+//   const { id } = request.params;
 
-  const keys = [
-    "fname",
-    "lname",
-    "dob",
-    "gender",
-    "post",
-    "age",
-    "mobile_no",
-    "status",
-    "email",
-    "block_count",
-    "mobile_model",
-    "auth_token",
-    "is_active",
-    "device_id",
-    "photo",
-    "token",
-  ];
-  const fields = [];
-  keys.forEach((key) => {
-    if (request.body[key]) fields.push(key);
-  });
+//   const keys = [
+//     "fname",
+//     "lname",
+//     "dob",
+//     "gender",
+//     "post",
+//     "age",
+//     "mobile_no",
+//     "status",
+//     "email",
+//     "block_count",
+//     "mobile_model",
+//     "auth_token",
+//     "is_active",
+//     "device_id",
+//     "photo",
+//     "token",
+//   ];
+//   const fields = [];
+//   keys.forEach((key) => {
+//     if (request.body[key]) fields.push(key);
+//   });
 
-  pool.query(
-    `UPDATE public.users SET updated_at = ($1) WHERE id =($2) Returning *`,
-    [currentTimeInMilliseconds, id],
-    (err, res) => {
-      if (err) return next(new ErrorHandler(400, err.message));
-    }
-  );
-  fields.forEach((field, index) => {
-    // if(field === 'password'){
-    //     request.body[field] = await bcrypt.hashSync(request.body[field],saltRounds.salt);
-    // }
-    pool.query(
-      `UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
-      [request.body[field], id],
-      (err, res) => {
-        if (err) return next(new ErrorHandler(400, err.message));
-        if (index === fields.length - 1)
-          response.status(200).json({ data: res.rows[0] });
-      }
-    );
-  });
-});
+//   pool.query(
+//     `UPDATE public.users SET updated_at = ($1) WHERE id =($2) Returning *`,
+//     [currentTimeInMilliseconds, id],
+//     (err, res) => {
+//       if (err) return next(new ErrorHandler(400, err.message));
+//     }
+//   );
+//   fields.forEach((field, index) => {
+//     // if(field === 'password'){
+//     //     request.body[field] = await bcrypt.hashSync(request.body[field],saltRounds.salt);
+//     // }
+//     pool.query(
+//       `UPDATE public.users SET ${field} = ($1) WHERE id =($2) Returning *`,
+//       [request.body[field], id],
+//       (err, res) => {
+//         if (err) return next(new ErrorHandler(400, err.message));
+//         if (index === fields.length - 1)
+//           response.status(200).json({ data: res.rows[0] });
+//       }
+//     );
+//   });
+// });
 
-router.put("/updatePassword/:id", async (request, response, next) => {
-  const { id } = request.params;
+router.put("/updatePassword", async (request, response, next) => {
+  const { mobile_no } = request.body;
   const { password } = request.body;
-  const passwordHash = await bcrypt.hashSync(password, saltRounds.salt);
+  // const passwordHash = await bcrypt.hashSync(password, saltRounds.salt);
 
   pool.query(
-    `UPDATE public.users SET password = ($1) WHERE id =($2) Returning *`,
-    [passwordHash, id],
+    `UPDATE public.users SET password = ($1) WHERE mobile_no =($2) Returning *`,
+    [password, mobile_no],
     (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
-      response.status(200).json({ message: "success" });
+      response.status(200).json(success("Updated Successfully", {},200));
     }
   );
 });
