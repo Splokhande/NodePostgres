@@ -6,6 +6,7 @@ const {user, host, database, password, port}= require('./db_config/config.js');
 const pool = new Pool({user, host, database, password, port});
 // const pool = require("./db");
 const userDetail = require("./routes/user");
+const adminDetail = require("./routes/admin/admin");
 const auth = require("./routes/auth");
 const address = require("./routes/address");
 const society = require("./routes/society");
@@ -28,6 +29,7 @@ app.get("/",(req,res)=>{
 
 app.use(bodyParser.json());
 app.use("/user", userDetail);
+app.use("/admin", adminDetail);
 app.use("/auth", auth);
 app.use('/address',address);
 app.use('/society',checkAuth,society);

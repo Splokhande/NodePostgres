@@ -54,6 +54,7 @@ router.post('/login', async(request, response, next) => {
               ) as userroom \
                       FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
                   WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, resp) =>{
+    
                         if(err) return  next(new ErrorHandler(400, err.message));
                         if(resp.rowCount === 0)
                         {
@@ -98,38 +99,5 @@ router.post('/login', async(request, response, next) => {
     // }
 });
 
-router.post('/newUser', async (request,response, next) =>{
-    const {fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo} = request.body;
-    // console.log(password,saltRounds.salt);  
-    // const passwordHash = await bcrypt.hashSync(password,saltRounds.salt);
-    // console.log(passwordHash);
-
-    // try {
-    pool.query('INSERT INTO users (fname, lname, dob, gender, post, email, device_id, mobile_no, token, age, block_count, mobile_model, auth_token , is_active, password, status, photo, updated_at, created_at, user_room_id, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21) RETURNING *' ,
-    ['', '', '', '', "user", '', '', mobile_no, token, age, '', mobile_model, auth_token , true, password, status, photo,currentTimeInMilliseconds,currentTimeInMilliseconds,[],[]], (err, res) =>{
-         if(err){
-            console.log(err.message);
-            return next(new ErrorHandler(400, err.message));
-            // console.log(err);
-            // console.log(err.message);
-            // return  next(new ErrorHandler(400, err.message));
-        }
-        return response.json(
-                success(
-                "User Created successfully",
-                res.rows[0],
-                res.statusCode
-            ));
-    });
-
-    // } catch (error) {
-    //     // console.log(error.message);
-    //     // return response.status(404).json({
-    //     //     "message":error.message,
-    //     // });
-    //     console.log(err.message);
-    //     throw (new ErrorHandler(400, err.message));
-    // }
-});
 
 module.exports = router;
