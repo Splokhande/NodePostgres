@@ -10,15 +10,54 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
 
+const { success, error, validation } = require("../functions/response");
 const authenticateAdmin = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+        const verified = jwt.verify(token, secret);
+        console.log(verified.post);
+        if(verified.post === "superadmin"){
+            req.user = verified;
+            next();
+        }
+        else {
+            res.status(400).json( success(
+                "Unauthorised access",
+                "",
+                res.statusCode));
+           
+        }
+        // jwt.verify(token, secret, (err, user) => {
+        //     if (err) {
+        //         console.log(err);
+        //         return res.sendStatus(403);
+        //     }
+        //     console.log(user);
+        //     req.user = user;
+        //     next();
+        // });
+    } 
+    else {
+        res.status(400).json(
+            success(
+                "Unauthorised access",
+                "",
+                res.statusCode));
+       
+    }
+};
+
+const authenticateUser = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
         const verified = jwt.verify(token, secret);
-        console.log(verified.post);
-        if(verified.post === "superadmin"){
+        console.log(verified);
+        if(verified){
             req.user = verified;
             next();
         }
@@ -39,5 +78,4 @@ const authenticateAdmin = (req, res, next) => {
     }
 };
 
-
-module.exports = authenticateAdmin;
+module.exports = {authenticateAdmin,authenticateUser};

@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
 
+const { success, error, validation } = require("../functions/response");
 
 const authenticateJWT = async(req, res, next) =>  {
     const authHeader = req.headers.authorization;
@@ -29,14 +30,20 @@ const authenticateJWT = async(req, res, next) =>  {
                req.user = reqUser;
                next();
            }else{
-               res.json({"message": "Invalid User"});;
+               res.json( success(
+                "Unauthorised access",
+                "",
+                res.statusCode));
            }
             // console.log(user);
             
 
         });
     } else {
-        res.json({"message": "Unauthorized User"});;
+        res.json(success(
+            "Unauthorised access",
+            "",
+            res.statusCode));;
     }
 };
 

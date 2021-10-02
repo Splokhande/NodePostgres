@@ -22,6 +22,7 @@ const multer = Multer({
     fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
   },
 });
+
 router.get("/getUser", (request, response, next) => {
   pool.query("Select * from users where post = user", (err, res) => {
     if (err) {

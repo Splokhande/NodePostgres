@@ -1,20 +1,20 @@
 const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
-const checkAdmin = require('./authenticateUser');
+const {authenticateAdmin,authenticateUser} = require('./authenticateUser');
 
-router.post("/add/society",checkAdmin,async(request,response,next) =>{
-console.log(request.user);
-const {post} = request.user;
-console.log("Post "+post);
-if(post !== "superadmin"){
-    return response.json(
-      {
-        "post":post,
-        "message":"You are not authorized for this",
-      }
-    )
-}
+router.post("/add/society",authenticateAdmin,async(request,response,next) =>{
+console.log(request);
+var data = request.user;
+// console.log("Post "+data.post);
+// if(post == "user"){
+//     return response.json(
+//       {
+//         "post":post,
+//         "message":"You are not authorized for this",
+//       }
+//     )
+// }
 
   let soc_id =0;
     const{soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude}=request.body;
