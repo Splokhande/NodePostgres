@@ -12,6 +12,7 @@ function jwt() {
             '/auth/login',
             '/user/newUser',
             '/user/newUser',
+            '/admin/login'
         ],
 
     });
