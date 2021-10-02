@@ -1,7 +1,7 @@
 const { Router, request, response } = require("express");
 const router = Router();
 const pool = require("../../db");
-const saltRounds = require("../../db_config/config");
+const {salt, secret} = require("../../db_config/config");
 var bcrypt = require("bcrypt");
 const {
   ErrorHandler,
@@ -9,8 +9,8 @@ const {
   ResponseHandler,
 } = require("../../functions/errorHandling");
 const uploadFile = require("../../functions/uploadPhoto.js");
-const checkAuth = require("../authenticateUser");
-const checkAdmin = require("../authenticateAdmin");
+const jwt = require('jsonwebtoken');
+const {authenticateAdmin, authenticateUser} = require('../authenticateUser');
 var currentTimeInMilliseconds = new Date().toLocaleString(undefined, {
   timeZone: "Asia/Kolkata",
 });
@@ -24,7 +24,7 @@ const multer = Multer({
 });
 
 
-router.post('/login', async(request, response, next) => {
+router.post('/login',authenticateAdmin, async(request, response, next) => {
 
   
 
@@ -43,12 +43,15 @@ router.post('/login', async(request, response, next) => {
       console.log(rows.rowCount > 0);
       // const validPassword = await bcrypt.compare(password, rows.rows[0].password);
       // console.log(validPassword);
+      console.log(rows.rows[0]);
       if(Array.isArray(rows.rows) && rows.rows.length)
     {
       // if(rows.rows[0].password === validPassword){
       if(rows.rows[0].password === password){
-          const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
-          // console.log(rows.rows[0].id, accessToken);
+        const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
+         
+        if( rows.rows[0].post == 'superadmin'){
+        // console.log(rows.rows[0].id, accessToken);
               pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
               [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
                   // console.log(data.rows);
@@ -57,9 +60,17 @@ router.post('/login', async(request, response, next) => {
                     "OK",
                     {
                         "user":rows.rows[0]},
-                    resp.statusCode
+                    data.statusCode
                 ));
               });
+            }
+            else{
+              response.status(400).json(  success(
+                "Unauthorised user",
+                {},
+                    response.statusCode
+            ));
+            }
       }else{
           response.status(400).json({ error: "Invalid Password" });
       }

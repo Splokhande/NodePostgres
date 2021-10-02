@@ -10,7 +10,6 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
 
-const { success, error, validation } = require("../functions/response");
 const authenticateAdmin = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
