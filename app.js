@@ -29,7 +29,7 @@ app.get("/",(req,res)=>{
 
 app.use(bodyParser.json());
 app.use("/user", userDetail);
-app.use("/admin", adminDetail);
+app.use("/admin",authenticateAdmin, adminDetail);
 app.use("/auth", auth);
 app.use('/address',address);
 app.use('/society',authenticateUser,society);
