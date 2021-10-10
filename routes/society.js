@@ -71,7 +71,7 @@ var data = request.user;
       });
 
 router.get('/get/society', async (request,response, next) =>{
-   pool.query("Select * from society", (err, res) =>{
+   pool.query("Select * from society as society inner join ", (err, res) =>{
         if(err){
           res.status(500);
           return  next(new ErrorHandler(400, err.message));
