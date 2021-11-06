@@ -1,9 +1,9 @@
-const { Router, request, response } = require("express");
-const router = Router();
-const pool = require("../db");
-const { ErrorHandler } = require("../functions/errorHandling");
+  const { Router, request, response } = require("express");
+  const router = Router();
+  const pool = require("../db");
+  const { ErrorHandler } = require("../functions/errorHandling");
 
-const { success, error, validation } = require("../functions/response");
+  const { success, error, validation } = require("../functions/response");
 ///country
 router.post("/add/country", (request, response, next) => {
   const { country } = request.body;
@@ -23,8 +23,11 @@ router.post("/add/country", (request, response, next) => {
   );
 });
 
-router.get("/get/country", (request, response, next) => {
-  pool.query("Select * from country", (err, res) => {
+router.get("/get/country/", (request, response, next) => {
+  
+
+
+  pool.query("Select * from country like %$1",[data], (err, res) => {
     if (err) return next(new ErrorHandler(400, err.message));
     response.json(success("OK", res.rows, res.status));
   });
@@ -286,8 +289,10 @@ router.post("/add/address", (request, response, next) => {
     full_address,
   } = request.body;
 
+
+
   pool.query(
-    "INSERT INTO address (ward_id,mc_id,area_id,city_id,district_id,state_id,country_id,pincode,full_address) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9) Returning *",
+    "INSERT INTO address (ward_id,mc_id,area_id,city_id,district_id,state_id,country_id,pincode,full_address) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9)",
     [ward, mc, area, city, district, state, country, pincode, full_address],
     (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
@@ -321,31 +326,31 @@ router.put("/update/address/:id", (request, response, next) => {
   });
 });
 
-router.get("/get/address", async (request, response, next) => {
-  const { id } = request.params;
+router.get("/get/address/:search", async (request, response, next) => {
+  const { search } = request.params;
+  console.log(`Select * from address where full_address LIKE '% ${search} %'`);
   address = pool.query(
-    `Select * from address`,
-    // params,
+    `Select * from address where full_address LIKE '%${search}%'`,
+    
     async (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
-
-      response.json(success("OK", res.rows, res.status));
+      
+      response.json(
+        success(
+          "OK",
+          
+             res.rows,
+          
+          res.status
+        )
+      );
       console.log({
         address: res.rows,
       });
     }
   );
 
-  response.json(
-    success(
-      "OK",
-      {
-        address: res.rows,
-        metadata: finalRes,
-      },
-      res.status
-    )
-  );
+  
 });
 
 router.put("/update/address/:id", (request, response, next) => {
