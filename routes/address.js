@@ -330,7 +330,7 @@ router.get("/get/address/:search", async (request, response, next) => {
   const { search } = request.params;
   console.log(`Select * from address where full_address LIKE '%${search}%'`);
   address = pool.query(
-    `Select * from address where full_address LIKE '%${search}%' LIMIT`,
+    `Select * from address where full_address LIKE '%${search}%' LIMIT 5 `,
     
     async (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
