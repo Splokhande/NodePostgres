@@ -24,9 +24,6 @@ router.post("/add/country", (request, response, next) => {
 });
 
 router.get("/get/country", (request, response, next) => {
-  
-
-
   pool.query("Select * from country ", (err, res) => {
     if (err) return next(new ErrorHandler(400, err.message));
     response.json(success("OK", res.rows, res.status));
