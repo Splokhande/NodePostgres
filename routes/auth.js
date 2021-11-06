@@ -18,7 +18,7 @@ router.post('/admin/login', async(request, response, next) => {
 
     // Read username and password from request body
     const { mobile_no, password,
-        // device_id, mobile_model 
+        device_id, mobile_model 
     } = request.body;
     console.log(request.body,mobile_no, password);
     // Filter user from the users array by username and password
