@@ -1,9 +1,9 @@
-exports.success = (message, data, statusCode) => {
+exports.success = (message, results, statusCode) => {
     return {
       message,
       error: false,
       code: statusCode,
-      data
+      results
     };
   };
 
