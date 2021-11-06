@@ -24,6 +24,9 @@ router.post("/add/country", (request, response, next) => {
 });
 
 router.get("/get/country", (request, response, next) => {
+  
+
+
   pool.query("Select * from country ", (err, res) => {
     if (err) return next(new ErrorHandler(400, err.message));
     response.json(success("OK", res.rows, res.status));
@@ -325,9 +328,9 @@ router.put("/update/address/:id", (request, response, next) => {
 
 router.get("/get/address/:search", async (request, response, next) => {
   const { search } = request.params;
-  console.log(`Select * from address where full_address LIKE '% ${search} %'`);
+  console.log(`Select * from address where full_address LIKE '%${search}%'`);
   address = pool.query(
-    `Select * from address where full_address LIKE '%${search}%'`,
+    `Select * from address where full_address LIKE '%${search}%' LIMIT`,
     
     async (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
@@ -335,9 +338,7 @@ router.get("/get/address/:search", async (request, response, next) => {
       response.json(
         success(
           "OK",
-          
-             res.rows,
-          
+          res.rows,
           res.status
         )
       );
