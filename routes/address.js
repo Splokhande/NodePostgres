@@ -328,9 +328,23 @@ router.put("/update/address/:id", (request, response, next) => {
 
 router.get("/get/address/:search", async (request, response, next) => {
   const { search } = request.params;
-  console.log(`Select * from address where full_address LIKE '%${search}%'`);
+  // console.log(`Select * from address where full_address LIKE '%${search}%'`);
   address = pool.query(
-    `Select * from address where full_address LIKE '%${search}%' LIMIT 5 `,
+    `With getAddress as  (
+      Select addr.id,addr.full_address, (
+          select ROW_TO_JSON(ar)
+            from (select * from area as ar where ar.area_id = addr.area_id )ar) as area ,
+          (select ROW_TO_JSON(ci)
+            from (select * from city as ci where ci.city_id = addr.city_id)ci) as city,
+          (select ROW_TO_JSON(dr)
+            from (select * from district as dr where dr.district_id = addr.district_id)dr) as district,	
+          (select ROW_TO_JSON(st)
+            from (select * from state as st where st.state_id = addr.state_id)st) as state,
+          (select ROW_TO_JSON(co)
+            from (select * from country as co where co.country_id = addr.country_id)co) as country
+    
+            from address as addr where addr.full_address LIKE '%${search}%' LIMIT 5
+    ) Select * from getAddress`,
     
     async (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
