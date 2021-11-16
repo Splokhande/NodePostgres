@@ -2,6 +2,9 @@ const {Router, request, response} = require("express");
 const router = Router();
 const pool = require("../db");
 const {authenticateAdmin,authenticateUser} = require('./authenticateUser');
+const { ErrorHandler } = require("../functions/errorHandling");
+
+const { success, error, validation } = require("../functions/response");
 
 router.post("/add/society",authenticateAdmin,async(request,response,next) =>{
 console.log(request);
@@ -71,15 +74,18 @@ var data = request.user;
       });
 
 router.get('/get/society', async (request,response, next) =>{
-   pool.query("Select * from society as society inner join ", (err, res) =>{
+   pool.query("With getSociety as (\
+    Select soc.*,(select row_to_json(addr) from (select * from address as addr where addr.id = soc.soc_address_id) addr)as soc_address from society as soc\
+  )select * from getSociety", (err, res) =>{
         if(err){
-          res.status(500);
+          // res.statusCode(500);
           return  next(new ErrorHandler(400, err.message));
         }
-         response.status(200).json({
-          "message":"Success",
-           "data":res.rows
-          });
+         response.json(  success(
+          "OK",
+          res.rows,
+          res.status
+        ));
       });
 });
 router.get('/get/society/:id', async (request,response, next) =>{

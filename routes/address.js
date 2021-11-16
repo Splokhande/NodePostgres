@@ -328,7 +328,7 @@ router.put("/update/address/:id", (request, response, next) => {
 
 router.get("/get/address/:search", async (request, response, next) => {
   const { search } = request.params;
-  // console.log(`Select * from address where full_address LIKE '%${search}%'`);
+  console.log(`Select * from address where full_address LIKE '%${search}%'`);
   address = pool.query(
     `With getAddress as  (
       Select addr.id,addr.full_address, (
