@@ -75,7 +75,7 @@ var data = request.user;
 
 router.get('/get/society', async (request,response, next) =>{
    pool.query("With getSociety as (\
-    Select soc.*,(select row_to_json(addr) from (select * from address as addr where addr.id = soc.soc_address_id) addr)as soc_address from society as soc\
+    Select soc.*,(select row_to_json(addr) from (select * from address as addr where addr.id = soc.soc_address_id) addr)as address from society as soc\
   )select * from getSociety", (err, res) =>{
         if(err){
           // res.statusCode(500);
