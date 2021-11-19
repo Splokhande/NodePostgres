@@ -25,7 +25,7 @@ var data = request.user;
     pool.query('INSERT INTO society (soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude,longitude)'+
     'VALUES ($1, $2,$3,$4,$5,$6,$7,$8, $9, $10, $11) RETURNING *' ,
     [soc_name,landmark,soc_reg_no,soc_address_id,total_room,total_floor,total_block,rooms_each_floor,total_shop,latitude, longitude],
-    (err, res) =>{
+    (err, res) =>{  
       if(err){
         res.status(500);
         return  next(new ErrorHandler(400, err.message));}
