@@ -49,10 +49,10 @@ const uploadImage =  async (req, res, next) => {
     console.log(__dirname);
     // console.log(upload);
     const file = req.file;
-    console.log(file);
+    // console.log(file);
     const timestamp = Date.now();
-    console.log(file.path);
-    console.log(dStorage.destination(req, req.file));
+    // console.log(file.path);
+    // console.log(dStorage.destination(req, req.file));
     const filename = file.originalname;
     const type = file.originalname.split(".")[1];
     const metadata = {
