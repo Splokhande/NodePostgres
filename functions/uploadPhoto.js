@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 var User = require("../routes/user");
 var Cloud = require("@google-cloud/storage");
 const multer = require("multer");
-
+require('../app');
 const { Storage } = require("@google-cloud/storage");
 const admin = require("firebase-admin");
 const firebaseDb = require('../db');
@@ -39,7 +39,7 @@ const dStorage = multer.diskStorage({
   },
 });
 
-// const firebase = require('./db/firebasedb');
+const firebase = require('../db/firebasedb');
 require("firebase/storage");
 const firebaseStore = admin.storage().bucket();
 // const upload = multer({ storage: dStorage }).single("file");
