@@ -8,7 +8,9 @@ router.use(bodyParser.json());
 var User = require("../routes/user");
 var Cloud = require("@google-cloud/storage");
 const multer = require("multer");
-const { Storage } = Cloud;
+
+const { Storage } = require("@google-cloud/storage");
+const admin = require("firebase-admin");
 const firebaseDb = require('../db');
 require("firebase/storage");
 require("dotenv").config();
