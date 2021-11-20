@@ -10,14 +10,14 @@ const checkAdmin = require("../routes/authenticateAdmin");
 var currentTimeInMilliseconds = new Date().toLocaleString(undefined, {
   timeZone: "Asia/Kolkata",
 });
-const Multer = require("multer");
+// const Multer = require("multer");
 const { success } = require("../functions/response");
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
-  },
-});
+// const multer = Multer({
+//   storage: Multer.memoryStorage(),
+//   limits: {
+//     fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+//   },
+// });
 router.get("/getUser", (request, response, next) => {
   pool.query("Select * from users ", (err, res) => {
     if (err) {
@@ -162,27 +162,27 @@ router.put("/updatePassword", async (request, response, next) => {
   );
 });
 
-router.put(
-  "/updatePhoto/:id",
-  multer.single("file"),
-  async (request, response, next) => {
-    let file = req.file;
-    if (file) {
-      uploadFile(file)
-        .then((success) => {
-          res
-            .status(200)
-            .send({
-              status: "success",
-            })
-            .json({ message: "Photo uploaded" });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }
-);
+// router.put(
+//   "/updatePhoto/:id",
+//   multer.single("file"),
+//   async (request, response, next) => {
+//     let file = req.file;
+//     if (file) {
+//       uploadFile(file)
+//         .then((success) => {
+//           res
+//             .status(200)
+//             .send({
+//               status: "success",
+//             })
+//             .json({ message: "Photo uploaded" });
+//         })
+//         .catch((error) => {
+//           console.error(error);
+//         });
+//     }
+//   }
+// );
 
 router.delete("/:id", (request, response, next) => {
   const id = request.params;

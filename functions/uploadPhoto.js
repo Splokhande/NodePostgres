@@ -1,54 +1,81 @@
-
-const {Router, request, response} = require("express");
+const { Router, request, response } = require("express");
 const router = Router();
 const pool = require("../db");
-var bodyParser = require('body-parser');
+const uuid = require("uuid");
+var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var User = require('../routes/user');
-var Cloud  = require('@google-cloud/storage');
-const Multer = require('multer');
+var User = require("../routes/user");
+var Cloud = require("@google-cloud/storage");
+const multer = require("multer");
 const { Storage } = Cloud;
-const storage = new Storage({
-  projectId: "parisar-17-5-2020",
-  keyFilename: "/firebase/private_key.js"
+const firebaseDb = require('../db');
+require("firebase/storage");
+require("dotenv").config();
+const firebaseStorage = firebaseDb.storage;
+global.XMLHttpRequest = require("xhr2");
+require("firebase/storage");
+const { ErrorHandler } = require("../functions/errorHandling");
+
+const { success, error, validation } = require("../functions/response");
+
+var serviceAccount = require("../firebase_server_key.json");
+
+// const { firebaseconfig } = require("../db_config/firebase_config");
+// app.locals.bucket = admin.storage().bucket();
+// const storage = new Storage({
+//   projectId: "societymanagement-a0f1e",
+//   keyFilename: "../firebase_server_key.json",
+// });
+
+const dStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
 });
 
-const bucket = storage.bucket("parisar-17-5-2020.appspot.com");
+// const firebase = require('./db/firebasedb');
+require("firebase/storage");
+// const firebaseStore = admin.storage().bucket();
+// const upload = multer({ storage: dStorage }).single("file");
+// app.post("/imgUpload", upload,);
 
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
-  }
-});
-
-const uploadImageToStorage = (file) => {
-  return new Promise((resolve, reject) => {
-    if (!file) {
-      reject('No image file');
-    }
-    let newFileName = `${file.originalname}_${Date.now()}`;
-
-    let fileUpload = bucket.file(newFileName);
-
-    const blobStream = fileUpload.createWriteStream({
+const uploadImage =  async (req, res, next) => {
+  try {
+    console.log(req.file);
+    console.log(__dirname);
+    console.log(upload);
+    const file = req.file;
+    console.log(file);
+    const timestamp = Date.now();
+    console.log(file.path);
+    console.log(dStorage.destination(req, req.file));
+    const filename = file.originalname;
+    const type = file.originalname.split(".")[1];
+    const metadata = {
       metadata: {
-        contentType: file.mimetype
-      }
+        firebaseStorageDownloadTokens: uuidv4(),
+      },
+      cacheControl: "public, max-age=31536000",
+    };
+
+    // Uploads a local file to the bucket
+    await firebaseStore.upload(filename, {
+      // Support for HTTP requests made with `Accept-Encoding: gzip`
+      gzip: true,
+      metadata: metadata,
     });
 
-    blobStream.on('error', (error) => {
-      reject('Something is wrong! Unable to upload at the moment.');
-    });
+    console.log(`${filename} uploaded.`);
+    res.send;
+  } catch (e) {
+    console.log(e);
+    new ErrorHandler(400, e.message);
+  }
+};
 
-    blobStream.on('finish', () => {
-      // The public URL can be used to directly access the file via HTTP.
-      const url = format(`https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`);
-      resolve(url);
-    });
 
-    blobStream.end(file.buffer);
-  });
-}
-module.exports = uploadImageToStorage;
+module.exports = uploadImage;
