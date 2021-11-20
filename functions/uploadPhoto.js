@@ -39,7 +39,7 @@ const dStorage = multer.diskStorage({
   },
 });
 
-const firebase = require('../db/firebasedb');
+// const firebase = require('../db/firebasedb');
 require("firebase/storage");
 const firebaseStore = admin.storage().bucket();
 // const upload = multer({ storage: dStorage }).single("file");
