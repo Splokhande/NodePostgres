@@ -47,7 +47,7 @@ const uploadImage =  async (req, res, next) => {
   try {
     console.log(req.file);
     console.log(__dirname);
-    console.log(upload);
+    // console.log(upload);
     const file = req.file;
     console.log(file);
     const timestamp = Date.now();
