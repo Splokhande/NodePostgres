@@ -3,6 +3,13 @@ const bodyParser = require("body-parser");
 const { Pool } = require("pg");
 const { Storage } = require("@google-cloud/storage");
 const admin = require("firebase-admin");
+
+const serviceAccount = require("./firebase_server_key.json");admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "gs://societymanagement-a0f1e.appspot.com",
+  databaseURL: "societymanagement-a0f1e.firebaseapp.com",
+});
+
 const app = new express();
 const path = require("path");
 const jwt = require("./helpers/jwt");
@@ -25,7 +32,6 @@ const society = require("./routes/society");
 const room = require("./routes/room");
 const uploadPhoto = require("./routes/uploadPhoto");
 const societyBody = require("./routes/societyBody");
-const serviceAccount = require("./firebase_server_key.json");
 // const app = express();
 const { handleError, handleResponse } = require("./functions/errorHandling");
 const {
@@ -33,17 +39,12 @@ const {
   authenticateUser,
 } = require("./routes/authenticateUser");
 const multer = require("multer");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "gs://societymanagement-a0f1e.appspot.com",
-  databaseURL: "societymanagement-a0f1e.firebaseapp.com",
-});
 const dStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
+    cb(null,file.originalname);
   },
 });
 
@@ -70,7 +71,7 @@ app.use("/address", address);
 app.use("/society", authenticateUser, society);
 app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
-app.use("/img", upload, uploadPhoto.router);
+app.use("/img", upload, uploadPhoto);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
