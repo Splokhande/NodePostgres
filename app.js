@@ -38,6 +38,15 @@ admin.initializeApp({
   storageBucket: "gs://societymanagement-a0f1e.appspot.com",
   databaseURL: "societymanagement-a0f1e.firebaseapp.com",
 });
+const dStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
+});
+
 const upload = multer({ storage: dStorage }).single("file");
 const imgUpload = require("./functions/uploadPhoto");
 // app.use(jwt());
@@ -61,7 +70,7 @@ app.use("/address", address);
 app.use("/society", authenticateUser, society);
 app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
-app.use('/img',upload,uploadPhoto);
+app.use("/img", upload, uploadPhoto.router);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
