@@ -18,6 +18,22 @@ const { success, error, validation } = require("../functions/response");
 const upload = multer({ storage: dStorage }).single("file");
 const imageUpload = require('../functions/uploadPhoto');
 
-router.post('/imgUpload',upload,imageUpload);
+router.post('/imgUpload',upload,async(req,response,next)=> {
+
+   const {id, file} = req.params;
+    const filePath = imageUpload(req) ;
+    pool.query(`Update users set photo = $1 where id = $2`,[filePath,id],(err,res)=>{
+        if(err)
+         new ErrorHandler(400,err.message);
+
+         response.json(
+             success(
+                 "Photo updated successfully",
+                 {},
+                 200
+             )
+         );
+    });
+});
 
 module.exports = router;

@@ -44,7 +44,7 @@ const dStorage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null,file.originalname);
+    cb(null,new Date.now().toISOString()+file.originalname);
   },
 });
 
@@ -71,7 +71,7 @@ app.use("/address", address);
 app.use("/society", authenticateUser, society);
 app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
-app.use("/img", upload, uploadPhoto);
+app.use("/img", authenticateUser, uploadPhoto);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
