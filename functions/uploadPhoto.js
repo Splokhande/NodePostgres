@@ -16,7 +16,7 @@ const firebaseStorage = firebaseDb.storage;
 global.XMLHttpRequest = require("xhr2");
 require("firebase/storage");
 const { ErrorHandler } = require("../functions/errorHandling");
-
+const { v4: uuidv4 } = require("uuid");
 const { success, error, validation } = require("../functions/response");
 
 var serviceAccount = require("../firebase_server_key.json");
