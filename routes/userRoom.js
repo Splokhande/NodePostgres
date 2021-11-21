@@ -2,7 +2,7 @@
 const router = Router();
 const pool = require("../db");
 var dateFormat = require('dateformat');
-var day=dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+var day=dateFormat(new Date.now(), "yyyy-mm-dd h:MM:ss");
 
 
 

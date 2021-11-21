@@ -12,7 +12,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
 const { success, error, validation } = require("../functions/response");
-var currentTimeInMilliseconds=new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
+var currentTimeInMilliseconds=new Date.now().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
 router.post('/login', async(request, response, next) => {
 
   
