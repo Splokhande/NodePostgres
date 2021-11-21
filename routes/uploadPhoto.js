@@ -9,7 +9,7 @@ const dStorage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null,file.originalname);
+    cb(null,new Date.now.toIsoString()+file.originalname);
   },
 });
 
@@ -19,9 +19,14 @@ const upload = multer({ storage: dStorage }).single("file");
 const imageUpload = require('../functions/uploadPhoto');
 
 router.post('/imgUpload',upload,async(req,response,next)=> {
+    // console.log(req);
+    const {id, file} = req.body;
+    // const filePath = imageUpload(req) ;
 
-   const {id, file} = req.params;
-    const filePath = imageUpload(req) ;
+    const filePath = imageUpload(req,response) ;
+    // console.log(filePath);
+    console.log(filePath);
+    console.log(id);
     pool.query(`Update users set photo = $1 where id = $2`,[filePath,id],(err,res)=>{
         if(err)
          new ErrorHandler(400,err.message);
