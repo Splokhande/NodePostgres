@@ -12,7 +12,7 @@ const {secret} =  require('../db_config/config');
 
 const authenticateAdmin = (req, res, next) => {
     const authHeader = req.headers.authorization;
-
+    console.log()
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         const verified = jwt.verify(token, secret);
