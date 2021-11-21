@@ -12,9 +12,9 @@ const {secret} =  require('../db_config/config');
 
 const authenticateAdmin = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    console.log()
+    console.log(authHeader);
     if (authHeader) {
-        const token = authHeader.split(' ')[1];
+        const token = authHeader;
         const verified = jwt.verify(token, secret);
         console.log(verified.post);
         if(verified.post === "superadmin"){
