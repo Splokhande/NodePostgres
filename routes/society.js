@@ -73,9 +73,25 @@ var data = request.user;
       });
 
 router.get('/get/society', async (request,response, next) =>{
-   pool.query("With getSociety as (\
-    Select soc.*,(select row_to_json(addr) from (select * from address as addr where addr.id = soc.soc_address_id) addr)as address from society as soc\
-  )select * from getSociety", (err, res) =>{
+   pool.query(`With getSociety as  (
+    Select soc.*, 
+   (select ROW_TO_JSON(addr)  
+      from (select addr.id,
+         (select ROW_TO_JSON(ar)
+          from (select * from area as ar where ar.area_id = addr.area_id )ar) as area ,
+        (select ROW_TO_JSON(ci)
+          from (select * from city as ci where ci.city_id = addr.city_id)ci) as city,
+        (select ROW_TO_JSON(dr)
+          from (select * from district as dr where dr.district_id = addr.district_id)dr) as district,	
+        (select ROW_TO_JSON(st)
+          from (select * from state as st where st.state_id = addr.state_id)st) as state,
+        (select ROW_TO_JSON(co)
+          from (select * from country as co where co.country_id = addr.country_id)co) as country
+        from address as addr where addr.id = soc.soc_address_id) addr) as address
+       
+  
+          from society as soc 
+  ) Select * from getSociety`, (err, res) =>{
         if(err){
           // res.statusCode(500);
           return  next(new ErrorHandler(400, err.message));
