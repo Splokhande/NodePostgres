@@ -343,7 +343,7 @@ router.get("/get/address/:search", async (request, response, next) => {
           (select ROW_TO_JSON(co)
             from (select * from country as co where co.country_id = addr.country_id)co) as country
     
-            from address as addr where addr.full_address LIKE '%${search}%' LIMIT 5
+            from address as addr where Upper(addr.full_address) LIKE Upper('%${search}%') LIMIT 5
     ) Select * from getAddress`,
     
     async (err, res) => {
