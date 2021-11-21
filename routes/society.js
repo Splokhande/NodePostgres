@@ -76,7 +76,7 @@ router.get('/get/society', async (request,response, next) =>{
    pool.query(`With getSociety as  (
     Select soc.*, 
    (select ROW_TO_JSON(addr)  
-      from (select addr.id,
+      from (select addr.id,addr.full_address,
          (select ROW_TO_JSON(ar)
           from (select * from area as ar where ar.area_id = addr.area_id )ar) as area ,
         (select ROW_TO_JSON(ci)
