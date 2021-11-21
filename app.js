@@ -68,7 +68,7 @@ app.use("/user", userDetail);
 app.use("/admin", authenticateAdmin, adminDetail);
 app.use("/auth", auth);
 app.use("/address", address);
-app.use("/society", authenticateUser, society);
+app.use("/society", authenticateAdmin, society);
 app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
 app.use("/img", authenticateUser, uploadPhoto);
