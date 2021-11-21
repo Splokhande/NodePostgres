@@ -53,7 +53,7 @@ const upload = multer({ storage: dStorage }).single("file");
 //     // console.log(upload);
 //     // const file = file;
 //     // console.log(file);
-//     const timestamp = Date.now();
+//     const timestamp = Date.now;
 //     // console.log(file.path);
 //     // console.log(dStorage.destination(req, req.file));
 //     // const filename = file.originalname;
@@ -88,7 +88,7 @@ const uploadImage =  async (req, res, next) => {
     // console.log(upload);
     const file = req.file;
     // console.log(file);
-    const timestamp = Date.now();
+    const timestamp = Date.now;
     // console.log(file.path);
     // console.log(dStorage.destination(req, req.file));
     const filename = file.originalname;
