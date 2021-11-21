@@ -11,7 +11,7 @@ const {
 const uploadFile = require("../../functions/uploadPhoto.js");
 const jwt = require('jsonwebtoken');
 const {authenticateAdmin, authenticateUser} = require('../authenticateUser');
-var currentTimeInMilliseconds = new Date()..toLocaleString(undefined, {
+var currentTimeInMilliseconds = new Date().toLocaleString(undefined, {
   timeZone: "Asia/Kolkata",
 });
 const Multer = require("multer");
