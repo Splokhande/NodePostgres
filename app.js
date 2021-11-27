@@ -32,6 +32,7 @@ const society = require("./routes/society");
 const room = require("./routes/room");
 const uploadPhoto = require("./routes/uploadPhoto");
 const societyBody = require("./routes/societyBody");
+const userRoom = require("./routes/userRoom");
 // const app = express();
 const { handleError, handleResponse } = require("./functions/errorHandling");
 const {
@@ -71,6 +72,7 @@ app.use("/address", address);
 app.use("/society", authenticateAdmin, society);
 app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
+app.use("/userRoom", authenticateUser, userRoom);
 app.use("/img", authenticateUser, uploadPhoto);
 app.use((err, req, res, next) => {
   handleError(err, res);

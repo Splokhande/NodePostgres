@@ -50,16 +50,15 @@ const authenticateAdmin = (req, res, next) => {
 
 const authenticateUser = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    
+    console.log(authHeader);
     if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
+        const token = authHeader;
         const verified = jwt.verify(token, secret);
-        console.log(verified);
-        if(verified){
+        console.log(verified.post);
+       
             req.user = verified;
             next();
-        }
+     
         // jwt.verify(token, secret, (err, user) => {
         //     if (err) {
         //         console.log(err);
@@ -71,8 +70,11 @@ const authenticateUser = (req, res, next) => {
         // });
     } 
     else {
-        res.status(400).json({
-            "message": "Unauthorized User"});;
+        res.status(400).json(
+            success(
+                "Unauthorised access",
+                "",
+                res.statusCode));
        
     }
 };

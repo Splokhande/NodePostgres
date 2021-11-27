@@ -41,7 +41,7 @@ router.get("/getUser/:id", (request, response, next) => {
       "SELECT u.*,(\
           select json_agg(userroom)\
           from ( \
-                  select *,\
+                  select ur.id,\
                   (select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
                       (select json_agg(society)from ( select * ,\
                               (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
