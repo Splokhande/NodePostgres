@@ -25,12 +25,12 @@ console.log("----------------------------------")
   console.log(request.user["userId"]);
   pool.query("Select * from users where id = $1",[userId], (err, res) => {
     if (err) {
-      res.status(500);
+      // res.status(500);
       return next(new ErrorHandler(400, err.message));
     }
     response.json(success(
       "User retrieved successfully",
-      res.rows,
+      res.rows[0],
       200,
      
     ));
