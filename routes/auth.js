@@ -102,7 +102,9 @@ router.post('/login', async(request, response, next) => {
       {
         // if(rows.rows[0].password === validPassword){
         if(rows.rows[0].password === password){
-            const accessToken = jwt.sign({ username: rows.rows[0].username,post: rows.rows[0].post}, secret);
+            const accessToken = jwt.sign({ username: rows.rows[0].username, post: rows.rows[0].post, userId:rows.rows[0].id}, secret);
+            console.log({ username: rows.rows[0].username, post: rows.rows[0].post, userId:rows.rows[0].id});
+            
             // console.log(rows.rows[0].id, accessToken);
                 pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
                 [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{

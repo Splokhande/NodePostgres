@@ -55,6 +55,7 @@ const authenticateUser = (req, res, next) => {
         const token = authHeader;
         const verified = jwt.verify(token, secret);
         console.log(verified.post);
+        console.log(verified.id);
        
             req.user = verified;
             next();

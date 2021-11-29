@@ -19,13 +19,17 @@ const { success } = require("../functions/response");
 //   },
 // });
 router.get("/getUser", (request, response, next) => {
-  pool.query("Select * from users ", (err, res) => {
+  console.log(request.user["userId"]);
+const userId = request.user["userId"];
+console.log("----------------------------------")
+  console.log(request.user["userId"]);
+  pool.query("Select * from users where id = $1",[userId], (err, res) => {
     if (err) {
       res.status(500);
       return next(new ErrorHandler(400, err.message));
     }
     response.json(success(
-      "All users retrieved successfully",
+      "User retrieved successfully",
       res.rows,
       200,
      
@@ -33,57 +37,56 @@ router.get("/getUser", (request, response, next) => {
   });
 });
 
-router.get("/getUser/:id", (request, response, next) => {
-  const { id } = request.params;
-  pool.query("Select * from users where id = $1", [id], (err, resp) => {
-    if (err) return next(new ErrorHandler(400, err.message));
-    pool.query(
-      "SELECT u.*,(\
-          select json_agg(userroom)\
-          from ( \
-                  select ur.id,\
-                  (select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
-                      (select json_agg(society)from ( select * ,\
-                              (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
-                              from society as s where s.soc_id = ur.soc_id ) society) as society \
-                      from user_room as ur where ur.userroom_id = ur_id \
-               ) userroom\
-            ) as userroom \
-          FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
-      WHERE ur_id IS NOT NULL;",
-      [id],
-      (err, res) => {
-        if (err) {
-          return next(new ErrorHandler(400, err.message));
-        }
+// router.get("/getUser/:id", (request, response, next) => {
+//   const { id } = request.params;
+//   pool.query("Select * from users where id = $1", [id], (err, resp) => {
+//     if (err) return next(new ErrorHandler(400, err.message));
+//     pool.query(
+//       "SELECT u.*,(\
+//           select json_agg(userroom)\
+//           from ( \
+//                   select ur.userroom_id,\
+//                   (select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
+//                       (select json_agg(society)from ( select * ,\
+//                               (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
+//                               from society as s where s.soc_id = ur.soc_id ) society) as society \
+//                       from user_room as ur where ur.userroom_id = ur_id \
+//                ) userroom\
+//             ) as userroom \
+//           FROM (SELECT UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
+//       WHERE ur_id IS NOT NULL;",
+//       [id],
+//       (err, res) => {
+//         if (err) {
+//           return next(new ErrorHandler(400, err.message));
+//         }
 
-        if (res.rowCount === 0) {
-          response.status(200).json(
+//         if (res.rowCount === 0) {
+//           response.status(200).json(
            
-              "success",
-              {
-                user: resp.rows[0],
-                userRoom: [],
-              },
-              200
+//               "success",
+//               {
+//                 user: resp.rows[0],
+//                 userRoom: [],
+//               },
+//               200
            
-          );
-        } else {
-          response.status(200).json(
-            success(
-              "success",
-              {
-                user: resp.rows[0],
-                userRoom: res.rows[0],
-              },
-              200
-            )
-          );
-        }
-      }
-    );
-  });
-});
+//           );
+//         } else {
+//           response.status(200).json(
+//             success(
+//               "success",
+//                               // user: resp.rows[0],
+//                 res.rows[0],
+              
+//               200
+//             )
+//           );
+//         }
+//       }
+//     );
+//   });
+// });
 
 router.get("/getUserRoom/:id", (request, response, next) => {
   const { id } = request.params;

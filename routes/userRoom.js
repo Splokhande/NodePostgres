@@ -18,20 +18,19 @@ router.get('/get/userRoom/:roomId',(request, response,next)=>{
 });
 
 router.post('/assign/room',(request,response,next)=>{
-    const {userId, roomId, socId,isResident,isRental} =request.body;
+    const {userId, roomId, socId,isResident,isRental,ownership} =request.body;
     console.log("I am here");
     pool.query('update rooms set members_id = array_append(members_id,$1) where room_id =1 AND soc_id =1',[userId],(err,room)=>{
         if(err) return  next(new ErrorHandler(400, err.message));
         console.log("I am here2");
-        pool.query('Insert into user_room (soc_id,room_id,user_id,from_date,is_resident,is_rental) values ($1,$2,$3,$4,$5,$6) Returning *',[socId,roomId,userId,day,isResident,isRental],(err,userRoom)=>{
+        pool.query('Insert into user_room (soc_id,room_id,user_id,from_date,is_resident,is_rental,ownership) values ($1,$2,$3,$4,$5,$6,$7) RETURNING * ',[socId,roomId,userId,day,isResident,isRental,ownership],(err,userRoom)=>{
             if(err) return  next(new ErrorHandler(400, err.message));
-            var userRoomId = userRoom.rows[0].id;
+            console.log(userRoom);
+            var userRoomId = userRoom.rows[0].userroom_id;
             console.log(`I am here3 ${userRoomId}`);
          pool.query('update users set user_room_id = array_append(user_room_id,$1) where id = $2',[userRoomId,userId],(err,users)=>{
             if(err) return  next(new ErrorHandler(400, err.message));
-            response.sendStatus(200).json({
-                "message":success,
-                });
+            response.json(success("Room registered Succesfully", [], 200));
             });
         });
     });
