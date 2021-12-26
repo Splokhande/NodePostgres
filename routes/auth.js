@@ -130,7 +130,8 @@ router.post('/login', async(request, response, next) => {
                                 "OK",
                                 {
                                     "user":rows.rows[0],
-                                    "room":resp.rows},
+                                    // "room":resp.rows
+                                },
                                 resp.statusCode
                             ));
                         }

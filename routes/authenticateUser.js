@@ -9,6 +9,7 @@ var User = require('../routes/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const {secret} =  require('../db_config/config');
+const {success} = require('../functions/response');
 
 const authenticateAdmin = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -24,7 +25,7 @@ const authenticateAdmin = (req, res, next) => {
         else {
             res.status(400).json( success(
                 "Unauthorised access",
-                "",
+                 "",
                 res.statusCode));
            
         }

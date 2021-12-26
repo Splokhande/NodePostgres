@@ -28,12 +28,32 @@ console.log("----------------------------------")
       // res.status(500);
       return next(new ErrorHandler(400, err.message));
     }
-    response.json(success(
-      "User retrieved successfully",
-      res.rows[0],
-      200,
-     
-    ));
+
+    pool.query("SELECT u.*,(\
+      select json_agg(userroom)\
+from ( \
+    select ur.userroom_id,\
+    (select json_agg(room) from ( select * from rooms as r where r.room_id = ur.room_id ) room) as room ,\
+        (select json_agg(society)from ( select * ,\
+                      (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
+                      from society as s where s.soc_id = ur.soc_id ) society) as society \
+      from user_room as ur where ur.userroom_id = ur_id \
+  ) userroom\
+) as userroom \
+      FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
+  WHERE ur_id IS NOT NULL;",[userId],(err,resp)=>{
+    if(err) return  next(new ErrorHandler(400, err.message));
+    response.status(200).json(
+      success(
+         "User retrieved successfully",
+          
+              // "user":res.rows[0],
+              resp.rows[0],
+          resp.statusCode
+      )
+      );
+  });
+    
   });
 });
 

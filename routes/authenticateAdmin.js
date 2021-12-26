@@ -18,7 +18,6 @@ const authenticateJWT = async(req, res, next) =>  {
         console.log(authHeader);
         jwt.verify(token, secret, async(err, user) => {
             console.log(token);
-           
             console.log(user);
             const reqUser = user;
             console.log(reqUser.post);
@@ -35,8 +34,6 @@ const authenticateJWT = async(req, res, next) =>  {
                 "",
                 res.statusCode));
            }
-            // console.log(user);
-            
 
         });
     } else {
