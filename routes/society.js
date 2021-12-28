@@ -112,7 +112,11 @@ router.get('/get/society/:id', async (request,response, next) =>{
           response.status(500);
           return  next(new ErrorHandler(400, err.message));
         }
-         response.json(res.rows);
+        //res.rows
+         response.json(success( "OK",
+         res.rows,
+         res.status
+       ));
       });
 });
 
@@ -141,7 +145,10 @@ router.get('/get/societyRoom/:id',(request, response,next)=>{
   const id = request.params.id;
   pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,true],(err,res)=>{
       if(err) return  next(new ErrorHandler(400, err.message));
-      response.json(res.rows);
+      response.json(success( "OK",
+      res.rows,
+      res.status
+    ));
   });
 });
 
