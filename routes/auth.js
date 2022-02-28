@@ -52,7 +52,7 @@ router.post('/login', async(request, response, next) => {
                 from ( \
                     select *,\
                         (select row_to_json(society)from ( select * ,\
-                                      (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
+                                      (select row_to_json(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
                                       from society as s where s.soc_id = ur.soc_id ) society) as society \
                       from user_room as ur where ur.userroom_id = ur_id \
                   ) room\
