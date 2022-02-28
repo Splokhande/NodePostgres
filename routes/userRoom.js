@@ -1,6 +1,6 @@
  const {Router, request, response} = require("express");
 const router = Router();
-const pool = require("../db");
+const pool = require("../db/db_path");
 var dateFormat = require('dateformat');
 var day=dateFormat(new Date().now, "yyyy-mm-dd h:MM:ss");
 const { ErrorHandler } = require("../functions/errorHandling");

@@ -32,6 +32,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^8.5.1",
+    "socket.io": "^4.4.1",
     "two-step-auth": "^1.1.2",
     "typeorm": "^0.2.34",
     "uuid": "^8.3.2",

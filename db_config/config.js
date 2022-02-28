@@ -18,5 +18,6 @@ module.exports = {
   port: 5432,
   secret: 'naksld1j5ais2hia8sdm5nakldn56aitiwgtiw7jjgjndsghaahbfjkabfafnfajfjjaa84siufd549dlk',
   salt:3,
+  socket_port:8000,
  ssl:{ rejectUnauthorized: false }
 };

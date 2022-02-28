@@ -1,6 +1,6 @@
 const {Router, request, response} = require("express");
 const router = Router();
-const pool = require("../db");
+const pool = require("../db/db_path");
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());

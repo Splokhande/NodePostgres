@@ -24,6 +24,18 @@ const pool = new Pool({ user, host, database, password, port });
 // const pool = require("./db");
 const { v4: uuidv4 } = require("uuid");
 uuidv4();
+
+///Socket
+const {emit} = require("process");
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+     origin: "http://localhost:3001",
+     methods: ["GET", "POST"],
+  },
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const userDetail = require("./routes/user");
 const adminDetail = require("./routes/admin/admin");
 const auth = require("./routes/auth");
@@ -33,6 +45,7 @@ const room = require("./routes/room");
 const uploadPhoto = require("./routes/uploadPhoto");
 const societyBody = require("./routes/societyBody");
 const userRoom = require("./routes/userRoom");
+const chat = require("./routes/chat");
 // const app = express();
 const { handleError, handleResponse } = require("./functions/errorHandling");
 const {
@@ -75,6 +88,7 @@ app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
 app.use("/userRoom", authenticateUser, userRoom);
 app.use("/img", authenticateUser, uploadPhoto);
+app.use("/img", authenticateUser, chat);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });

@@ -1,6 +1,6 @@
 const { Router, request, response } = require("express");
 const router = Router();
-const pool = require("../../db");
+const pool = require("../../db/db_path");
 const {salt, secret} = require("../../db_config/config");
 var bcrypt = require("bcrypt");
 const {

@@ -1,6 +1,6 @@
 const { Router, request, response } = require("express");
 const router = Router();
-const pool = require("../db");
+const pool = require("../db/db_path");
 const uuid = require("uuid");
 var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -11,7 +11,7 @@ const multer = require("multer");
 require('../app');
 const { Storage } = require("@google-cloud/storage");
 const admin = require("firebase-admin");
-const firebaseDb = require('../db');
+const firebaseDb = require('../db/db_path');
 require("firebase/storage");
 require("dotenv").config();
 const firebaseStorage = firebaseDb.storage;

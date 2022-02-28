@@ -1,6 +1,6 @@
 const {Router, request, response} = require("express");
 const router = Router();
-const pool = require("../db");
+const pool = require("../db/db_path");
 const { ErrorHandler, handleError, ResponseHandler } = require("../functions/errorHandling");
 const saltRounds = require("../db_config/config");
 var bcrypt = require("bcrypt");
@@ -79,9 +79,9 @@ router.post('/login', async(request, response, next) => {
                             response.status(200).json(
                                 success(
                                     resp.rowCount+" Rooms found",
-                                    {data : {
+                                    {
                                         "user":rows.rows[0],
-                                        "room":resp.rows}},
+                                        "room":resp.rows},
                                     resp.statusCode
                                 )
                                 );
