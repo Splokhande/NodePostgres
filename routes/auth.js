@@ -79,7 +79,7 @@ router.post('/login', async(request, response, next) => {
                                 success(
                                     resp.rowCount+" Rooms found",
                                     {
-                                        "user":resp.rows,
+                                        "user":resp.rows[0],
                                         // "room":resp.rows
                                     },
                                     resp.statusCode
