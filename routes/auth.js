@@ -48,15 +48,15 @@ router.post('/login', async(request, response, next) => {
                 [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
                     // console.log(data.rows);
                     pool.query("SELECT u.*,(\
-                      select json_agg(userroom)\
+                      select json_agg(room)\
                 from ( \
                     select *,\
                         (select json_agg(society)from ( select * ,\
                                       (select json_agg(address) from ( select * from address as addr where s.soc_address_id = id ) address) as address \
                                       from society as s where s.soc_id = ur.soc_id ) society) as society \
                       from user_room as ur where ur.userroom_id = ur_id \
-                  ) userroom\
-              ) as userroom \
+                  ) room\
+              ) as room \
                       FROM (SELECT *, UNNEST(user_room_id) as ur_id FROM users where id = $1)  u \
                   WHERE ur_id IS NOT NULL;",  [rows.rows[0].id], (err, resp) =>{
                         if(err) return  next(new ErrorHandler(400, err.message));
