@@ -66,8 +66,8 @@ router.post('/login', async(request, response, next) => {
                                 success(
                                 "OK",
                                 {
-                                    "user":rows.rows[0],
-                                    // "room":resp.rows
+                                    "user":resp.rows[0],
+                                    
                                 },
                                 resp.statusCode
                             ));
@@ -80,8 +80,7 @@ router.post('/login', async(request, response, next) => {
                                     resp.rowCount+" Rooms found",
                                     {
                                         "user":resp.rows[0],
-                                        // "room":resp.rows
-                                    },
+                                        },
                                     resp.statusCode
                                 )
                                 );
