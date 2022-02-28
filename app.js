@@ -88,7 +88,7 @@ app.use("/room", authenticateUser, room);
 app.use("/societyBody", authenticateUser, societyBody);
 app.use("/userRoom", authenticateUser, userRoom);
 app.use("/img", authenticateUser, uploadPhoto);
-app.use("/chat", authenticateUser, chat);
+// app.use("/chat", authenticateUser, chat);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
