@@ -39,7 +39,7 @@ router.post("/add/state", (request, response, next) => {
   pool.query(
     "INSERT INTO state  (state,country_id) VALUES ($1, $2) returning * ",
     [state, country_id],
-    (err, res) => {
+    (err, res) => { 
       if (err) return next(new ErrorHandler(400, err.message));
       console.log("New State Added: ", res.rowCount);
       response.json(success("OK", res.rows, res.status));

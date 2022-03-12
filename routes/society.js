@@ -35,7 +35,7 @@ var data = request.user;
       soc_id = res.rows[0].soc_id;
             for (i = 0; i <blocks ; i++) {
               for(j = 0; j< floors[i];j++){
-                  for(k=0; k<rooms[i]; k++){
+                  for(k=0; k<rooms[j]; k++){
                     var room_no = `${String.fromCharCode(65+i)}-${j}0${k+1}`;
                       arr.push(`${String.fromCharCode(65+i)}-${j}0${k+1}`);
                       pool.query('INSERT INTO rooms (soc_id, room_no,owner, on_rent, on_sale, carpet_area, room_structure, balcony, is_occupied, total_members, room_exists) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11)' ,
