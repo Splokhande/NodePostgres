@@ -1,0 +1,3 @@
+-- Select * from rooms order by room_no ASC
+Delete from rooms where soc_id = 6;
+Delete from society where soc_id = 6;

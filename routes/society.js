@@ -32,10 +32,11 @@ var data = request.user;
       const floors =total_floor;
       const rooms = rooms_each_floor;
       var arr = [];
+      console.log(`Block:${blocks} Floor:${floors} Rooms:${rooms}`);
       soc_id = res.rows[0].soc_id;
             for (i = 0; i <blocks ; i++) {
-              for(j = 0; j< floors[i];j++){
-                  for(k=0; k<rooms[j]; k++){
+              for(j = 0; j<= floors[i];j++){
+                  for(k=0; k<rooms[i]; k++){
                     var room_no = `${String.fromCharCode(65+i)}-${j}0${k+1}`;
                       arr.push(`${String.fromCharCode(65+i)}-${j}0${k+1}`);
                       pool.query('INSERT INTO rooms (soc_id, room_no,owner, on_rent, on_sale, carpet_area, room_structure, balcony, is_occupied, total_members, room_exists) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11)' ,
@@ -143,7 +144,7 @@ router.put('/update/society/:id', async (request,response, next)=>{
 
 router.get('/get/societyRoom/:id',(request, response,next)=>{
   const id = request.params.id;
-  pool.query('select * from rooms where soc_id = $1 AND room_exists =$2',[id,true],(err,res)=>{
+  pool.query('select * from rooms where soc_id = $1 AND room_exists =$2 order by room_no ASC',[id,true],(err,res)=>{
       if(err) return  next(new ErrorHandler(400, err.message));
       response.json(success( "OK",
       res.rows,

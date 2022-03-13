@@ -131,6 +131,7 @@ router.post("/add/area", (request, response, next) => {
     (err, res) => {
       if (err) return next(new ErrorHandler(400, err.message));
       console.log("New Area Added: ", res.rowCount);
+      console.log("New Area Added: ", res.rows);
       response.json(success("OK", res.rows, res.status));
     }
   );
