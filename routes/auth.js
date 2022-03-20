@@ -44,8 +44,8 @@ router.post('/login', async(request, response, next) => {
             console.log({ username: rows.rows[0].username, post: rows.rows[0].post, userId:rows.rows[0].id});
             
             // console.log(rows.rows[0].id, accessToken);
-                pool.query(`UPDATE public.users SET auth_token = ($1), device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
-                [accessToken, device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
+                pool.query(`UPDATE public.users SET device_id = ($2), mobile_model = ($3) WHERE id =($4)`,
+                [device_id, mobile_model, rows.rows[0].id]).then((data, err) =>{
                     // console.log(data.rows);
                     pool.query("SELECT (\
                       select json_agg(userroom)\
@@ -67,6 +67,7 @@ router.post('/login', async(request, response, next) => {
                                 success(
                                 "OK",
                                 {
+                                    "authToken":accessToken,
                                     "user":rows.rows[0],
                                     "room":resp.rows
                                 },

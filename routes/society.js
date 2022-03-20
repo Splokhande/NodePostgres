@@ -115,7 +115,7 @@ router.get('/get/society/:id', async (request,response, next) =>{
         }
         //res.rows
          response.json(success( "OK",
-         res.rows,
+         res.rows[0],
          res.status
        ));
       });
